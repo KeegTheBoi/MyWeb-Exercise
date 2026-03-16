@@ -1,3 +1,7 @@
+
+
+import random
+
 from flask import Flask, jsonify, send_from_directory
 import os
 
@@ -25,9 +29,9 @@ def serve_file(filename):
     return send_from_directory(BASE_DIR, filename)
 
 #API endpoint to send data to front trough the script in the html file
-@app.route("/api/quotes")
+@app.route("/api/quote")
 def get_quotes():
-    return jsonify({"quotes": quotes})
+    return jsonify({"quote": random.choice(quotes)})
 
 if __name__ == "__main__":
     app.run(port=5000)
