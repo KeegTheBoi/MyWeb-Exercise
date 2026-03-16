@@ -1,17 +1,16 @@
 //Binds the load button to the getData function
 document.getElementById("loadBtn").addEventListener("click", getData);
 
-document.getElementById("clearBtn").addEventListener("click", function () {
-  document.getElementById("outPara").innerText = "";
-});
-
 //Fetches data from backend trough the API endpoint and updates the paragraph text with the response
 function getData() {
-  fetch("http://localhost:5000/api/data")
+  fetch("http://localhost:5000/api/quotes")
     .then((response) => response.json())
     .then((data) => {
-      document.getElementById("outPara").innerText =
-        data.message + " (" + data.status + ")";
+      data.quotes.forEach((quote) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = quote;
+        document.getElementById("myList").appendChild(listItem);
+      });
     })
     .catch((error) => console.error("Error:", error));
 }
