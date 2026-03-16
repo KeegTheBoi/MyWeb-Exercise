@@ -3,7 +3,7 @@ document.getElementById("loadBtn").addEventListener("click", getData);
 
 //Fetches data from backend trough the API endpoint and updates the paragraph text with the response
 function getData() {
-  fetch("http://localhost:5000/api/data")
+  fetch("/api/data")
     .then((response) => response.json())
     .then((data) => {
       document.getElementById("outPara").innerText =
