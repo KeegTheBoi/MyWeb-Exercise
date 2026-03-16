@@ -1,0 +1,22 @@
+body {
+  display: flex;
+  flex-direction: column; /* stack elements vertically */
+  justify-content: center; /* vertical centering */
+  align-items: center; /* horizontal centering */
+  height: 100vh; /* full viewport height */
+  margin: 0; /* remove default margin */
+  font-family: Arial, sans-serif;
+}
+
+/* Optional spacing between header and buttons */
+h1 {
+  margin-bottom: 20px;
+}
+
+/* Style the buttons */
+.button-group button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
