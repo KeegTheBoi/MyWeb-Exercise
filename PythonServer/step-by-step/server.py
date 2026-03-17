@@ -60,6 +60,7 @@ def delete_quote(quote_id):
     q_manager.delete_quote(quote_id)  # Delete the quote from the JSON file
     return good_response("Quote deleted successfully!", q_manager.get_dict_quotes())
 
+
 #API endpoint to edit a quote from the front trough the script in the html file
 @app.route("/api/edit_quote/<int:quote_id>", methods=["PUT"])
 def edit_quote(quote_id):
