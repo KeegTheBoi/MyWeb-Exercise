@@ -12,6 +12,8 @@ const createBtn = document.getElementById("createBtn");
 const updateBtn = document.getElementById("updateBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 const itemList = document.getElementById("itemList");
+//Added for mood selection
+const selectedMoodList = document.getElementById("moodSelector");
 
 let editingId = null;
 
@@ -31,6 +33,12 @@ function getCurrentDate() {
   return now.toISOString().slice(0, 10); // Only date in YYYY-MM-DD format
 }
 
+function getSelectedMood() {
+  const selectedMood = selectedMoodList.value; // Get the selected mood from the dropdown
+  if (!selectedMood) return alert("Please select a mood");
+  return selectedMood;
+}
+
 async function loadItems() {
   try {
     const items = await client.readAll();
@@ -44,8 +52,9 @@ function displayItems(moods) {
   itemList.innerHTML = "";
   moods.forEach((mood_entry) => {
     const li = document.createElement("li");
-    console.log(mood_entry); // Debugging line to check the mood entry data
-    li.textContent = `${mood_entry.id}: ${mood_entry.note}, ${mood_entry.date}`; // Assuming 'content' field, adjust as needed
+
+    //Edit here for the mood entry display format, adjust as needed based on your data structure
+    li.textContent = `[${mood_entry.date}] (${mood_entry.mood}) → ${mood_entry.note}`; // Assuming 'content' field, adjust as needed
 
     const editBtn = document.createElement("button");
     editBtn.textContent = "Edit";
@@ -63,10 +72,15 @@ function displayItems(moods) {
 
 async function createItem() {
   const note = itemInput.value.trim();
+
   if (!note) return alert("Content cannot be empty");
 
   try {
-    await client.create({ note: note, date: getCurrentDate() }); // Adjust fields as needed
+    await client.create({
+      note: note,
+      date: getCurrentDate(),
+      mood: getSelectedMood(),
+    }); // Adjust fields as needed
     itemInput.value = "";
     loadItems();
   } catch (error) {
@@ -75,7 +89,7 @@ async function createItem() {
 }
 
 function startEdit(item) {
-  itemInput.value = item.note || ""; // Adjust field
+  itemInput.value = item.note || ""; // This is editing based on the 'note' field, adjust if your data structure is different
   editingId = item.id;
   createBtn.style.display = "none";
   updateBtn.style.display = "inline";
@@ -87,7 +101,11 @@ async function updateItem() {
   if (!note) return alert("Content cannot be empty");
 
   try {
-    await client.update(editingId, { note: note, date: getCurrentDate() }); // Adjust fields
+    await client.update(editingId, {
+      note: note,
+      date: getCurrentDate(),
+      mood: getSelectedMood(),
+    }); // Adjust fields
     cancelEdit();
     loadItems();
   } catch (error) {

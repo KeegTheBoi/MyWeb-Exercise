@@ -1,7 +1,14 @@
 [
   {
-    "note": "with correct date",
+    "note": "i want to ride a cycle",
     "date": "2026-03-17",
-    "id": 5
+    "mood": "happy",
+    "id": 7
+  },
+  {
+    "note": "i was joking, im sad",
+    "date": "2026-03-17",
+    "mood": "sad",
+    "id": 8
   }
 ]
