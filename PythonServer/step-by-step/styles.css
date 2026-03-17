@@ -14,7 +14,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr; /* 2 equal columns */
   gap: 20px;
-  height: 50vh; /* limit overall height */
+  min-height: 50vh; /* limit overall height */
   width: 70vw; /* limit overall width */
   padding: 30px;
   box-sizing: border-box;
@@ -36,6 +36,7 @@ body {
   border: 1px solid #ccc;
   padding-right: 30px;
   align-items: center; /* horizontal centering */
+  height: 40vh;
 }
 
 /* Optional spacing between header and buttons */
@@ -67,11 +68,21 @@ h1 {
   display: flex;
   justify-content: space-between; /* pushes button to the right */
   align-items: center;
-  padding: 10px 10px;
+  padding: 5px 10px;
   gap: 10 px; /* adds space between quote and button */
 }
 
 .diplayingQuotes li span {
   flex: 1; /* takes all available space */
   word-break: break-word; /* handles long text nicely */
+}
+
+#responseList {
+  flex: 1; /* fills available vertical space */
+  overflow-y: auto; /* scroll only when content exceeds height */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  box-sizing: border-box;
 }
