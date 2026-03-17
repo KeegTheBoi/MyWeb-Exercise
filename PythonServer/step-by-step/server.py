@@ -13,10 +13,10 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 FILE_PATH_JSON = "quotes.json"
 q_manager = QuoteManager(FILE_PATH_JSON)
 
-def bad_response(message: str, quotes = [], status_code: int = 400):
+def bad_response(message: str, quotes, status_code: int = 400):
     return jsonify({"success": False, "message": "An error occurred!", "quotes": quotes}), status_code
 
-def good_response(message: str, quotes = [], status_code: int = 200):
+def good_response(message: str, quotes, status_code: int = 200):
     return jsonify({"success": True, "message": "Quote submitted successfully!", "quotes": quotes}), status_code
 
 # Serve index.html
@@ -37,7 +37,7 @@ def get_random_quote():
 #API endpoint to send all quotes to front trough the script in the html file
 @app.route("/api/all_quotes")
 def get_all_quotes():
-    return jsonify({"quotes": q_manager.get_quotes()})
+    return jsonify({"quotes": q_manager.get_dict_quotes()})
 
 #API endpoint to receive new quote from the front trough the script in the html file
 @app.route("/api/submit_quote", methods=["POST"])
@@ -48,7 +48,7 @@ def submit_quote():
         return bad_response("Quote cannot be empty!")
     
     q_manager.add_quote(posted_quote)  # Add the new quote to the JSON file
-    return good_response("Quote submitted successfully!", q_manager.get_quotes())
+    return good_response("Quote submitted successfully!", q_manager.get_dict_quotes())
 
 #API endpoint to delete a quote from the front trough the script in the html file
 @app.route("/api/delete_quote/<int:quote_id>", methods=["DELETE"])
@@ -58,7 +58,22 @@ def delete_quote(quote_id):
         return bad_response("Quote ID is required!")
     
     q_manager.delete_quote(quote_id)  # Delete the quote from the JSON file
-    return good_response("Quote deleted successfully!", q_manager.get_quotes())
+    return good_response("Quote deleted successfully!", q_manager.get_dict_quotes())
+
+#API endpoint to edit a quote from the front trough the script in the html file
+@app.route("/api/edit_quote/<int:quote_id>", methods=["PUT"])
+def edit_quote(quote_id):
+    data = request.get_json() # Get the Jsonified data from the front-end
+    new_quote = data.get("quote", "")
+    
+    if quote_id is None:
+        return bad_response("Quote ID is required!")
+    
+    if new_quote == "":
+        return bad_response("Quote cannot be empty!")
+    
+    q_manager.edit_quote(quote_id, new_quote)  # Edit the quote in the JSON file
+    return good_response("Quote edited successfully!", q_manager.get_dict_quotes())
 
 if __name__ == "__main__":
     app.run(port=5000)

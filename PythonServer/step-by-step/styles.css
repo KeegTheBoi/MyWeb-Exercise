@@ -15,7 +15,7 @@ body {
   grid-template-columns: 1fr 1fr; /* 2 equal columns */
   gap: 20px;
   height: 50vh; /* limit overall height */
-  width: 60vw; /* limit overall width */
+  width: 70vw; /* limit overall width */
   padding: 30px;
   box-sizing: border-box;
   align-items: start; /* default align items at top */
@@ -35,7 +35,6 @@ body {
   flex-direction: column;
   border: 1px solid #ccc;
   padding-right: 30px;
-  max-width: 500px;
   align-items: center; /* horizontal centering */
 }
 
@@ -69,4 +68,10 @@ h1 {
   justify-content: space-between; /* pushes button to the right */
   align-items: center;
   padding: 10px 10px;
+  gap: 10 px; /* adds space between quote and button */
+}
+
+.diplayingQuotes li span {
+  flex: 1; /* takes all available space */
+  word-break: break-word; /* handles long text nicely */
 }

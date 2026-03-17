@@ -88,16 +88,46 @@ function addDeleteButton(li, quoteId) {
   li.appendChild(deleteBtn);
 }
 
+function addEditButton(li, quoteId) {
+  const editBtn = document.createElement("button");
+  editBtn.textContent = "Edit";
+  editBtn.addEventListener("click", () => editQuote(quoteId));
+  li.appendChild(editBtn);
+}
+
+//------------- EDIT QUOTE -------------
+async function editQuote(quoteId) {
+  const newQuote = prompt("Enter the new quote:");
+  if (!newQuote) {
+    alert("Quote cannot be empty");
+    return;
+  }
+
+  const data = await apiRequest(`/edit_quote/${quoteId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ quote: newQuote }),
+  });
+
+  if (data) {
+    console.log("Quote edited:", quoteId);
+    updateList(data.quotes);
+  }
+}
+
 // ---------- UPDATE LIST ----------
 function updateList(quotesDict) {
   responseList.innerHTML = "";
 
-  quotesDict.forEach((quote, index) => {
+  quotesDict.forEach((item) => {
     const li = document.createElement("li");
     const itemSpan = document.createElement("span");
-    itemSpan.textContent = quote; // Preserve the quote text in the list item
+    itemSpan.textContent = item.index + ": " + item.quote; // Preserve the quote text in the list item
     li.appendChild(itemSpan);
-    addDeleteButton(li, index); // Pass the quote ID to the delete button
+    addDeleteButton(li, item.index); // Pass the quote ID to the delete button
+    addEditButton(li, item.index); // Pass the quote ID to the edit button
     responseList.appendChild(li);
   });
 }
