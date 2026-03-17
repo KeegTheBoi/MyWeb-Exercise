@@ -1,61 +1,82 @@
-//Binds the load button to the getData function
-document.getElementById("loadBtn").addEventListener("click", getData);
+// ---------- DOM REFERENCES ----------
+const loadBtn = document.getElementById("loadBtn");
+const submitBtn = document.getElementById("submitBtn");
+const showListBtn = document.getElementById("showListBtn");
 
-document.getElementById("submitBtn").addEventListener("click", submitQuote);
+const quoteParagraph = document.getElementById("quoteParagraph");
+const quoteInput = document.getElementById("quoteInput");
+const responseList = document.getElementById("responseList");
 
-//Fetches data from backend trough the API endpoint and updates the paragraph text with the response
-function getData() {
-  fetch("http://localhost:5000/api/random_quote")
-    .then((response) => response.json())
-    .then((data) => {
-      //Get the quote from the response and update the paragraph text
-      document.getElementById("quoteParagraph").innerText = data.quote;
-    })
-    .catch((error) => console.error("Error:", error));
+// ---------- EVENT LISTENERS ----------
+loadBtn.addEventListener("click", getRandomQuote);
+submitBtn.addEventListener("click", submitQuote);
+showListBtn.addEventListener("click", showAllQuotes);
+
+// ---------- API BASE ----------
+const API_BASE = "http://localhost:5000/api";
+
+// ---------- GENERIC FETCH HELPER ----------
+async function apiRequest(endpoint, options = {}) {
+  try {
+    const response = await fetch(`${API_BASE}${endpoint}`, options);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("API Error:", error);
+    alert("Server error. Check console.");
+  }
 }
 
-function showList() {
-  fetch("http://localhost:5000/api/all_quotes")
-    .then((response) => response.json())
-    .then((data) => {
-      updateList(data.quotes);
-    })
-    .catch((error) => console.error("Error:", error));
+// ---------- GET RANDOM QUOTE ----------
+async function getRandomQuote() {
+  const data = await apiRequest("/random_quote");
+
+  if (data) {
+    quoteParagraph.innerText = data.quote;
+  }
 }
 
-function submitQuote() {
-  const quoteInput = document.getElementById("quoteInput");
-  const quote = quoteInput.value;
+// ---------- SHOW ALL QUOTES ----------
+async function showAllQuotes() {
+  const data = await apiRequest("/all_quotes");
 
-  fetch("http://localhost:5000/api/submit_quote", {
+  if (data) {
+    updateList(data.quotes);
+  }
+}
+
+// ---------- SUBMIT QUOTE ----------
+async function submitQuote() {
+  const quote = quoteInput.value.trim();
+
+  if (!quote) {
+    alert("Quote cannot be empty");
+    return;
+  }
+
+  const data = await apiRequest("/submit_quote", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ quote }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (!data.success) {
-        alert(data.message);
-      } else {
-        console.log("Quote submitted:", data.message);
-        quoteInput.value = ""; // Clear the input field
-        updateList(data.quotes); // Optionally
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  });
+
+  quoteInput.value = "";
+  updateList(data.quotes);
 }
 
+// ---------- UPDATE LIST ----------
 function updateList(quotes) {
-  const responseList = document.getElementById("responseList");
-  responseList.innerHTML = ""; // Clear the list
+  responseList.innerHTML = "";
 
   quotes.forEach((quote) => {
-    const listElement = document.createElement("li");
-    listElement.innerText = quote;
-    responseList.appendChild(listElement);
+    const li = document.createElement("li");
+    li.textContent = quote;
+    responseList.appendChild(li);
   });
 }
