@@ -6,6 +6,35 @@ body {
   height: 100vh; /* full viewport height */
   margin: 0; /* remove default margin */
   font-family: Arial, sans-serif;
+  background-color: black;
+  color: white;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 equal columns */
+  gap: 20px;
+  height: 80vh; /* limit overall height */
+  padding: 20px;
+  box-sizing: border-box;
+  align-items: start; /* default align items at top */
+}
+
+.quoteParagraph {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto; /* allow scroll if content exceeds height */
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.diplayingQuotes {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  padding: 10px;
+  overflow: auto;
 }
 
 /* Optional spacing between header and buttons */
@@ -21,7 +50,13 @@ h1 {
   cursor: pointer;
 }
 
-.list-container {
-  margin-top: 20px;
-  background-color: beige;
+.submitting input {
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  width: 400px;
+  height: 30px;
+  border: 1px solid white;
+  background-color: darkslategray;
+  font-size: medium;
+  color: azure;
 }

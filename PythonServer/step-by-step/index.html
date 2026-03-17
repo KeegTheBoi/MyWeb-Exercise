@@ -1,17 +1,37 @@
 <!doctype html>
 <html>
   <head>
-    <title>JavaScript Response</title>
+    <title>Step 5</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
-    <h1>JavaScript Response Example</h1>
-    <div class="button-group">
-      <button id="loadBtn">Click Me</button>
-    </div>
+    <div class="container">
+      <div class="buttonsGroup">
+        <h1>Generating Quotes</h1>
+        <div class="button-group">
+          <button id="loadBtn">Generate</button>
+        </div>
 
-    <p id="quoteParagraph"></p>
+        <p id="quoteParagraph"></p>
+
+        <h2>Submit a quote</h2>
+        <div class="submitting">
+          <input
+            type="text"
+            id="quoteInput"
+            placeholder="Enter your quote here"
+          />
+        </div>
+        <div class="button-group">
+          <button id="submitBtn">Submit</button>
+        </div>
+      </div>
+
+      <div class="diplayingQuotes">
+        <ul id="responseList"></ul>
+      </div>
+    </div>
 
     <script src="script.js"></script>
   </body>
