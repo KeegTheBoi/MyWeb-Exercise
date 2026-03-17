@@ -38,9 +38,14 @@ def serve_file(filename):
     return send_from_directory(BASE_DIR, filename)
 
 #API endpoint to send data to front trough the script in the html file
-@app.route("/api/quote")
-def get_quotes():
+@app.route("/api/random_quote")
+def get_random_quote():
     return jsonify({"quote": random.choice(get_json_data()["quotes"])})
+
+#API endpoint to send all quotes to front trough the script in the html file
+@app.route("/api/all_quotes")
+def get_all_quotes():
+    return jsonify({"quotes": get_json_data()["quotes"]})
 
 @app.route("/api/submit_quote", methods=["POST"])
 def submit_quote():

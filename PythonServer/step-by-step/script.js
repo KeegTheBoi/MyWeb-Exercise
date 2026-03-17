@@ -5,11 +5,20 @@ document.getElementById("submitBtn").addEventListener("click", submitQuote);
 
 //Fetches data from backend trough the API endpoint and updates the paragraph text with the response
 function getData() {
-  fetch("http://localhost:5000/api/quote")
+  fetch("http://localhost:5000/api/random_quote")
     .then((response) => response.json())
     .then((data) => {
       //Get the quote from the response and update the paragraph text
       document.getElementById("quoteParagraph").innerText = data.quote;
+    })
+    .catch((error) => console.error("Error:", error));
+}
+
+function showList() {
+  fetch("http://localhost:5000/api/all_quotes")
+    .then((response) => response.json())
+    .then((data) => {
+      updateList(data.quotes);
     })
     .catch((error) => console.error("Error:", error));
 }
