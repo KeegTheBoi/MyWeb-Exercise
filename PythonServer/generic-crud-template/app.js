@@ -27,13 +27,13 @@ cancelBtn.addEventListener("click", cancelEdit);
 async function loadItems() {
   try {
     const items = await client.readAll();
-    displayItems(items);
+    displayQuiz(items);
   } catch (error) {
     alert("Failed to load items");
   }
 }
 
-function displayItems(items) {
+function displayQuiz(items) {
   itemList.innerHTML = "";
   items.forEach((item) => {
     const li = document.createElement("li");

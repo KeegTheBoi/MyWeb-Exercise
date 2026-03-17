@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Mood Tracker</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Mood Tracker Storing files through JSON</h1>
+
+    <!-- Form for creating/updating items -->
+    <div id="itemForm">
+      <input
+        type="text"
+        id="titleInput"
+        placeholder="Enter your quiz question here"
+      />
+
+      <input
+        type="text"
+        id="answerInput"
+        placeholder="Write your answer choices (comma-separated)"
+      />
+
+      <input
+        type="text"
+        id="correctAnswerInput"
+        placeholder="Write the correct answer"
+      />
+
+      <button id="createBtn">Submit</button>
+      <button id="updateBtn" style="display: none">Update</button>
+      <button id="cancelBtn" style="display: none">Cancel</button>
+    </div>
+
+    <!-- List of items -->
+    <ul id="itemList"></ul>
+
+    <script src="crud_client.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
