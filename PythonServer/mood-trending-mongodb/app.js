@@ -62,7 +62,8 @@ function displayItems(moods) {
 
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
-    deleteBtn.addEventListener("click", () => deleteItem(mood_entry.id));
+
+    deleteBtn.addEventListener("click", () => deleteItem(mood_entry._id));
 
     li.appendChild(editBtn);
     li.appendChild(deleteBtn);
@@ -90,7 +91,7 @@ async function createItem() {
 
 function startEdit(item) {
   itemInput.value = item.note || ""; // This is editing based on the 'note' field, adjust if your data structure is different
-  editingId = item.id;
+  editingId = item._id;
   createBtn.style.display = "none";
   updateBtn.style.display = "inline";
   cancelBtn.style.display = "inline";
