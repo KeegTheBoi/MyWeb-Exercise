@@ -34,9 +34,8 @@ async function apiRequest(endpoint, options = {}) {
 // ---------- GET RANDOM QUOTE ----------
 async function getRandomQuote() {
   const data = await apiRequest("/random_quote");
-
   if (data) {
-    quoteParagraph.innerText = data.quote;
+    quoteParagraph.innerText = data.quote; // Get the quote text from the response
   }
 }
 
@@ -74,9 +73,9 @@ async function submitQuote() {
 function updateList(quotes) {
   responseList.innerHTML = "";
 
-  quotes.forEach((quote) => {
+  Object.values(quotes).forEach((quote) => {
     const li = document.createElement("li");
-    li.textContent = quote;
+    li.textContent = quote; // Get the quote text from the quote object
     responseList.appendChild(li);
   });
 }
