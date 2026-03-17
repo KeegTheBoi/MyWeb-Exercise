@@ -2,6 +2,8 @@
 
 import random, json
 
+from api.quote_manager import QuoteManager
+
 from flask import Flask, jsonify, request, send_from_directory
 import os
 
@@ -10,22 +12,8 @@ app = Flask(__name__)
 # Current folder
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
-
-def get_json_data():
-    with open("quotes.json", "r") as f:
-        return json.load(f)  # data is now a dict
-    
-def wite_json_data(data):
-    # Write the updated data back to the file
-    with open("quotes.json", "w") as f:
-        json.dump(data, f, indent=2)
-
-def add_quote(new_quote):
-    data = get_json_data()  # Get the existing data as a dict
-    # Add the new quote to the list
-    data["quotes"].append(new_quote)
-    # Write the updated data back to the file
-    wite_json_data(data)
+FILE_PATH_JSON = "quotes.json"
+q_manager = QuoteManager(FILE_PATH_JSON)
 
 # Serve index.html
 @app.route("/")
@@ -40,12 +28,12 @@ def serve_file(filename):
 #API endpoint to send data to front trough the script in the html file
 @app.route("/api/random_quote")
 def get_random_quote():
-    return jsonify({"quote": random.choice(get_json_data()["quotes"])})
+    return jsonify({"quote": q_manager.get_random_quote()})
 
 #API endpoint to send all quotes to front trough the script in the html file
 @app.route("/api/all_quotes")
 def get_all_quotes():
-    return jsonify({"quotes": get_json_data()["quotes"]})
+    return jsonify({"quotes": q_manager.get_quotes()})
 
 @app.route("/api/submit_quote", methods=["POST"])
 def submit_quote():
@@ -55,8 +43,8 @@ def submit_quote():
     if(posted_quote == ""):
         return jsonify({"success": False, "message": "No quote provided!", "quotes": []}), 400
     
-    add_quote(posted_quote)  # Add the new quote to the JSON file
-    return jsonify({"success": True, "message": "Quote {posted_quote} submitted successfully!", "quotes": get_json_data()["quotes"]})
+    q_manager.add_quote(posted_quote)  # Add the new quote to the JSON file
+    return jsonify({"success": True, "message": "Quote {posted_quote} submitted successfully!", "quotes": q_manager.get_quotes()})
 
 if __name__ == "__main__":
     app.run(port=5000)
