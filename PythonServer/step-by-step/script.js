@@ -69,13 +69,35 @@ async function submitQuote() {
   updateList(data.quotes);
 }
 
+//------------- DELETE QUOTE -------------
+async function deleteQuote(quoteId) {
+  const data = await apiRequest(`/delete_quote/${quoteId}`, {
+    method: "DELETE",
+  });
+
+  if (data) {
+    console.log("Quote deleted:", quoteId);
+    updateList(data.quotes);
+  }
+}
+
+function addDeleteButton(li, quoteId) {
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Delete";
+  deleteBtn.addEventListener("click", () => deleteQuote(quoteId));
+  li.appendChild(deleteBtn);
+}
+
 // ---------- UPDATE LIST ----------
-function updateList(quotes) {
+function updateList(quotesDict) {
   responseList.innerHTML = "";
 
-  Object.values(quotes).forEach((quote) => {
+  quotesDict.forEach((quote, index) => {
     const li = document.createElement("li");
-    li.textContent = quote; // Get the quote text from the quote object
+    const itemSpan = document.createElement("span");
+    itemSpan.textContent = quote; // Preserve the quote text in the list item
+    li.appendChild(itemSpan);
+    addDeleteButton(li, index); // Pass the quote ID to the delete button
     responseList.appendChild(li);
   });
 }

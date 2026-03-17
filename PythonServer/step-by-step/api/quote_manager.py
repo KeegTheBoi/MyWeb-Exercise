@@ -18,3 +18,8 @@ class QuoteManager:
 
     def get_random_quote(self):
         return random.choice(self.get_dict_quotes())
+    
+    def delete_quote(self, quote_id):
+        data = self.get_dict_quotes()
+        data = [quote for quote in data if quote["index"] != quote_id]
+        write_json_data(self.json_file, data)

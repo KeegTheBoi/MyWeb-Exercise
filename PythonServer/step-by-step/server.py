@@ -50,5 +50,15 @@ def submit_quote():
     q_manager.add_quote(posted_quote)  # Add the new quote to the JSON file
     return good_response("Quote submitted successfully!", q_manager.get_quotes())
 
+#API endpoint to delete a quote from the front trough the script in the html file
+@app.route("/api/delete_quote/<int:quote_id>", methods=["DELETE"])
+def delete_quote(quote_id):
+    print(f"Received request to delete quote with ID: {quote_id}")    
+    if quote_id is None:
+        return bad_response("Quote ID is required!")
+    
+    q_manager.delete_quote(quote_id)  # Delete the quote from the JSON file
+    return good_response("Quote deleted successfully!", q_manager.get_quotes())
+
 if __name__ == "__main__":
     app.run(port=5000)

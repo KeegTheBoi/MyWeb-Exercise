@@ -34,9 +34,9 @@ body {
   display: flex;
   flex-direction: column;
   border: 1px solid #ccc;
-  padding: 10px 20px 10px 20px;
-  overflow: auto;
-  max-width: 430px;
+  padding-right: 30px;
+  max-width: 500px;
+  align-items: center; /* horizontal centering */
 }
 
 /* Optional spacing between header and buttons */
@@ -61,4 +61,12 @@ h1 {
   background-color: darkslategray;
   font-size: medium;
   color: azure;
+}
+
+.diplayingQuotes li {
+  border-top: #ccc solid 1px;
+  display: flex;
+  justify-content: space-between; /* pushes button to the right */
+  align-items: center;
+  padding: 10px 10px;
 }
