@@ -29,6 +29,9 @@ user_manager = UserLogic(user_collection)
 #user_api = GenericAPI(app, user_manager, "user", base_dir=BASE_DIR)
 
 quiz_api = GenericAPI(app, quiz_manager, ENTITY_NAME, base_dir=BASE_DIR)
+quiz_api.register_static_routes()
+
+user_api = GenericAPI(app, user_manager, "user", base_dir=BASE_DIR)
 
 if __name__ == "__main__":
     app.run(port=5000)

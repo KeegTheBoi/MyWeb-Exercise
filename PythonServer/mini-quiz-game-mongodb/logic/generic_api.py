@@ -14,29 +14,45 @@ class GenericAPI:
         self.entity_name = entity_name
         self.base_dir = base_dir or os.getcwd()
         self.register_routes()
-        if base_dir:
-            self.register_static_routes()
 
     def register_routes(self):
-        # CRUD endpoints
+    # CRUD endpoints with UNIQUE endpoint names
+
         self.app.add_url_rule(
-            f"/api/all_{self.entity_name}s", view_func=self.get_all_items
+            f"/api/all_{self.entity_name}s",
+            view_func=self.get_all_entries,
+            endpoint=f"get_all_{self.entity_name}s"
         )
+
         self.app.add_url_rule(
-            f"/api/{self.entity_name}/<item_id>", view_func=self.get_item
+            f"/api/{self.entity_name}/<item_id>",
+            view_func=self.get_item,
+            endpoint=f"get_{self.entity_name}"
         )
+
         self.app.add_url_rule(
-            f"/api/{self.entity_name}", view_func=self.create_item, methods=["POST"]
+            f"/api/{self.entity_name}",
+            view_func=self.create_item,
+            methods=["POST"],
+            endpoint=f"create_{self.entity_name}"
         )
+
         self.app.add_url_rule(
-            f"/api/{self.entity_name}/<item_id>", view_func=self.update_item, methods=["PUT"]
+            f"/api/{self.entity_name}/<item_id>",
+            view_func=self.update_item,
+            methods=["PUT"],
+            endpoint=f"update_{self.entity_name}"
         )
+
         self.app.add_url_rule(
-            f"/api/{self.entity_name}/<item_id>", view_func=self.delete_item, methods=["DELETE"]
+            f"/api/{self.entity_name}/<item_id>",
+            view_func=self.delete_item,
+            methods=["DELETE"],
+            endpoint=f"delete_{self.entity_name}"
         )
 
     # --------- Endpoint methods ---------
-    def get_all_items(self):
+    def get_all_entries(self):
         items = self.manager.read_all()
         return self.good_response(f"All {self.entity_name}s retrieved", items)
 

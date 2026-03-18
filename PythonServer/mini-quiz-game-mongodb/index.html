@@ -7,37 +7,66 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>Creating Quizzes</h1>
+    <div class="userCreator">
+      <h1>Creating Quizzes</h1>
 
-    <!-- Form for creating/updating items -->
-    <div id="itemForm">
-      <input
-        type="text"
-        id="titleInput"
-        placeholder="Enter your quiz question here"
-      />
+      <!-- Form for creating/updating items -->
+      <div id="itemForm">
+        <input
+          type="text"
+          id="quizTitleInput"
+          placeholder="Enter your quiz question here"
+        />
 
-      <input
-        type="text"
-        id="answerInput"
-        placeholder="Write your answer choices (comma-separated)"
-      />
+        <input
+          type="text"
+          id="quizChoicesInput"
+          placeholder="Write your answer choices (comma-separated)"
+        />
 
-      <input
-        type="text"
-        id="correctAnswerInput"
-        placeholder="Write the correct answer"
-      />
+        <input
+          type="text"
+          id="quizCorrectInput"
+          placeholder="Write the correct answer"
+        />
 
-      <button id="createBtn">Submit</button>
-      <button id="updateBtn" style="display: none">Update</button>
-      <button id="cancelBtn" style="display: none">Cancel</button>
+        <button id="createQuizBtn">Submit</button>
+        <button id="updateQuizBtn" style="display: none">Update</button>
+        <button id="cancelQuizBtn" style="display: none">Cancel</button>
+      </div>
+
+      <!-- List of items -->
+      <ul id="quizList"></ul>
     </div>
 
-    <!-- List of items -->
-    <ul id="itemList"></ul>
+    <h1>Creating Users</h1>
 
-    <script src="crud_client.js"></script>
+      <!-- Form for creating/updating items -->
+      <div id="userForm">
+        <input
+          type="text"
+          id="usernameInput"
+          placeholder="Enter your username"
+        />
+
+        <input
+          type="text"
+          id="emailInput"
+          placeholder="Enter your email"
+        />
+
+        <button id="createUserBtn">Submit</button>
+        <button id="updateUserBtn" style="display: none">Update</button>
+        <button id="cancelUserBtn" style="display: none">Cancel</button>
+      </div>
+
+      <!-- List of items -->
+      <ul id="userList"></ul>
+    </div>
+
+    <script src="crud_js/crud_ui_manager.js"></script>
+    <script src="crud_js/crud_entity_ui_setup.js"></script>
+    <script src="crud_js/crud_client.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
