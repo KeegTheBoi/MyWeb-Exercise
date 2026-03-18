@@ -1,7 +1,7 @@
 
 from bson import ObjectId
 
-class CRUD_Logic:
+class ManagerCRUD:
     """
     A generic CRUD manager for handling a list of dictionaries stored in a JSON file.
     Each item in the list is expected to be a dictionary with a unique 'id' field.

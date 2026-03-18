@@ -4,10 +4,10 @@
 const API_BASE = "http://localhost:5000/api";
 const ENTITY_NAME = "item"; // Change this for different entities
 
-const client = new CrudClient(API_BASE, ENTITY_NAME);
+const quiz_client = new CrudClient(API_BASE, ENTITY_NAME);
 
 // DOM references
-const itemInput = document.getElementById("itemInput");
+const titleInput = document.getElementById("itemInput");
 const createBtn = document.getElementById("createBtn");
 const updateBtn = document.getElementById("updateBtn");
 const cancelBtn = document.getElementById("cancelBtn");
@@ -26,7 +26,7 @@ cancelBtn.addEventListener("click", cancelEdit);
 // Functions
 async function loadItems() {
   try {
-    const items = await client.readAll();
+    const items = await quiz_client.readAll();
     displayQuiz(items);
   } catch (error) {
     alert("Failed to load items");
@@ -54,12 +54,12 @@ function displayQuiz(items) {
 }
 
 async function createItem() {
-  const content = itemInput.value.trim();
+  const content = titleInput.value.trim();
   if (!content) return alert("Content cannot be empty");
 
   try {
-    await client.create({ content }); // Adjust fields as needed
-    itemInput.value = "";
+    await quiz_client.create({ content }); // Adjust fields as needed
+    titleInput.value = "";
     loadItems();
   } catch (error) {
     alert("Failed to create item");
@@ -67,7 +67,7 @@ async function createItem() {
 }
 
 function startEdit(item) {
-  itemInput.value = item.content || ""; // Adjust field
+  titleInput.value = item.content || ""; // Adjust field
   editingId = item.id;
   createBtn.style.display = "none";
   updateBtn.style.display = "inline";
@@ -75,11 +75,11 @@ function startEdit(item) {
 }
 
 async function updateItem() {
-  const content = itemInput.value.trim();
+  const content = titleInput.value.trim();
   if (!content) return alert("Content cannot be empty");
 
   try {
-    await client.update(editingId, { content }); // Adjust fields
+    await quiz_client.update(editingId, { content }); // Adjust fields
     cancelEdit();
     loadItems();
   } catch (error) {
@@ -88,7 +88,7 @@ async function updateItem() {
 }
 
 function cancelEdit() {
-  itemInput.value = "";
+  titleInput.value = "";
   editingId = null;
   createBtn.style.display = "inline";
   updateBtn.style.display = "none";
@@ -99,7 +99,7 @@ async function deleteItem(id) {
   if (!confirm("Are you sure?")) return;
 
   try {
-    await client.delete(id);
+    await quiz_client.delete(id);
     loadItems();
   } catch (error) {
     alert("Failed to delete item");

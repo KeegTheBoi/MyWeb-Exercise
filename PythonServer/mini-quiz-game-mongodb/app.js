@@ -5,9 +5,9 @@ const API_BASE = "http://localhost:5000/api";
 const QUIZ_ENTITY_NAME = "quiz"; // Change this for different entities
 const USER_ENTITY_NAME = "user"; // Change this for different entities
 
-const quiz_client = new CrudClient(API_BASE, ENTITY_NAME);
+const quiz_client = new CrudClient(API_BASE, QUIZ_ENTITY_NAME);
 
-const user_client = new CrudClient(API_BASE, USER_ENTITY_NAME);
+//const user_client = new CrudClient(API_BASE, USER_ENTITY_NAME);
 
 //#region Quiz management View Display
 // DOM references
@@ -39,9 +39,22 @@ function getCurrentDate() {
   return now.toISOString().slice(0, 10); // Only date in YYYY-MM-DD format
 }
 
+getChoicesFromInput = (input) => {
+  return input
+    .trim()
+    .split(",")
+    .map((choice) => choice.trim());
+};
+
+function cleanseText() {
+  titleInput.value = "";
+  correctAnswerInput.value = "";
+  answerInput.value = "";
+}
+
 async function loadItems() {
   try {
-    const items = await client.readAll();
+    const items = await quiz_client.readAll();
     displayQuiz(items);
   } catch (error) {
     alert("Failed to load items");
@@ -54,7 +67,7 @@ function displayQuiz(quizzes) {
     const li = document.createElement("li");
 
     //Edit here for the mood entry display format, adjust as needed based on your data structure
-    li.textContent = `[${quiz_entry.date}] (${quiz_entry.title}) → ${quiz_entry.choices.join(", ")}, Correct Answer: ${quiz_entry.correctAnswer}`; // Assuming 'content' field, adjust as needed
+    li.textContent = `[${quiz_entry.date}]\n\n (${quiz_entry.title})\n[${quiz_entry.choices.join(", ")}] \nCorrect Answer: ${quiz_entry.correctAnswer}`; // Assuming 'content' field, adjust as needed
 
     const editBtn = document.createElement("button");
     editBtn.textContent = "Edit";
@@ -72,24 +85,29 @@ function displayQuiz(quizzes) {
 }
 
 async function createItem() {
-  const title = itemInput.value.trim();
+  const title = titleInput.value.trim();
 
   if (!title) return alert("Content cannot be empty");
 
   try {
-    await client.create({
+    await quiz_client.create({
       title: title,
       date: getCurrentDate(),
+      correctAnswer: correctAnswerInput.value.trim(),
+      choices: getChoicesFromInput(answerInput.value),
     }); // Adjust fields as needed
-    itemInput.value = "";
+    titleInput.value = "";
+    console.log("working");
     loadItems();
   } catch (error) {
-    alert("Failed to create item");
+    alert("Failed to create item" + error);
   }
 }
 
 function startEdit(item) {
-  itemInput.value = item.title || ""; // This is editing based on the 'title' field, adjust if your data structure is different
+  titleInput.value = item.title || ""; // This is editing based on the 'title' field, adjust if your data structure is different
+  correctAnswerInput.value = item.correctAnswer || "";
+  answerInput.value = item.choices ? item.choices.join(", ") : "";
   editingId = item._id;
   createBtn.style.display = "none";
   updateBtn.style.display = "inline";
@@ -97,11 +115,11 @@ function startEdit(item) {
 }
 
 async function updateItem() {
-  const note = itemInput.value.trim();
+  const note = titleInput.value.trim();
   if (!note) return alert("Content cannot be empty");
 
   try {
-    await client.update(editingId, {
+    await quiz_client.update(editingId, {
       note: note,
       date: getCurrentDate(),
       correctAnswer: correctAnswerInput.value.trim(),
@@ -118,7 +136,7 @@ async function updateItem() {
 }
 
 function cancelEdit() {
-  itemInput.value = "";
+  cleanseText();
   editingId = null;
   createBtn.style.display = "inline";
   updateBtn.style.display = "none";
@@ -129,7 +147,7 @@ async function deleteItem(id) {
   if (!confirm("Are you sure?")) return;
 
   try {
-    await client.delete(id);
+    await quiz_client.delete(id);
     loadItems();
   } catch (error) {
     alert("Failed to delete item");

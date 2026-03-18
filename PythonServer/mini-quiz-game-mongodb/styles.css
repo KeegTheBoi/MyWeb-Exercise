@@ -21,8 +21,7 @@ body {
   font-size: medium;
 }
 
-#itemInput,
-#moodSelector {
+input {
   height: 35px; /* same height */
   line-height: 35px; /* match vertical text alignment */
   padding: 0 10px; /* horizontal padding */
@@ -31,12 +30,6 @@ body {
   border-radius: 4px;
   box-sizing: border-box; /* includes padding & border in height */
   appearance: none;
-}
-
-#moodSelector {
-  width: 100px; /* adjust width as needed */
-  background-color: darkslategray;
-  color: wheat;
 }
 
 ul {
@@ -51,6 +44,7 @@ li {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  white-space: pre-line;
 }
 
 /* Modern rounded Apple-style button */

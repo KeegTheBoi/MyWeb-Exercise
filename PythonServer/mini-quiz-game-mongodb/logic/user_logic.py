@@ -1,7 +1,7 @@
 
-from generic_crud import CRUD_Logic
+from .generic_crud import ManagerCRUD
 
-class UserLogic(CRUD_Logic):
+class UserLogic(ManagerCRUD):
     def __init__(self, collection):
         super().__init__(collection)
         self.score = 0
