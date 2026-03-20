@@ -1,0 +1,77 @@
+body {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: black;
+  color: whitesmoke;
+}
+
+#itemForm {
+  display: flex;
+  margin-bottom: 20px;
+  gap: 10px; /* space between input and select */
+  align-items: center; /* vertical alignment */
+}
+
+#itemInput {
+  padding: 8px;
+  background-color: cadetblue;
+  color: black;
+  font-size: medium;
+}
+
+input {
+  height: 35px; /* same height */
+  line-height: 35px; /* match vertical text alignment */
+  padding: 0 10px; /* horizontal padding */
+  font-size: 16px; /* match font size */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* includes padding & border in height */
+  appearance: none;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: pre-line;
+}
+
+/* Modern rounded Apple-style button */
+button {
+  background: #898b8e; /* Apple-grey style */
+  color: black;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 24px; /* nice padding */
+  border: none;
+  border-radius: 12px; /* rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* subtle shadow */
+  cursor: pointer;
+  transition: all 0.2s ease; /* smooth hover transition */
+  outline: none;
+}
+
+/* Hover effect */
+button:hover {
+  background: #005bb5; /* slightly darker blue */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Active / click effect */
+button:active {
+  background: #004494;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+}

@@ -41,7 +41,7 @@ function getSelectedMood() {
 
 async function loadItems() {
   try {
-    const items = await client.readAll();
+    const items = await quiz_client.readAll();
     displayItems(items);
   } catch (error) {
     alert("Failed to load items");
@@ -62,7 +62,8 @@ function displayItems(moods) {
 
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
-    deleteBtn.addEventListener("click", () => deleteItem(mood_entry.id));
+
+    deleteBtn.addEventListener("click", () => deleteItem(mood_entry._id));
 
     li.appendChild(editBtn);
     li.appendChild(deleteBtn);
@@ -76,7 +77,7 @@ async function createItem() {
   if (!note) return alert("Content cannot be empty");
 
   try {
-    await client.create({
+    await quiz_client.create({
       note: note,
       date: getCurrentDate(),
       mood: getSelectedMood(),
@@ -90,7 +91,7 @@ async function createItem() {
 
 function startEdit(item) {
   itemInput.value = item.note || ""; // This is editing based on the 'note' field, adjust if your data structure is different
-  editingId = item.id;
+  editingId = item._id;
   createBtn.style.display = "none";
   updateBtn.style.display = "inline";
   cancelBtn.style.display = "inline";
@@ -101,7 +102,7 @@ async function updateItem() {
   if (!note) return alert("Content cannot be empty");
 
   try {
-    await client.update(editingId, {
+    await quiz_client.update(editingId, {
       note: note,
       date: getCurrentDate(),
       mood: getSelectedMood(),
@@ -125,7 +126,7 @@ async function deleteItem(id) {
   if (!confirm("Are you sure?")) return;
 
   try {
-    await client.delete(id);
+    await quiz_client.delete(id);
     loadItems();
   } catch (error) {
     alert("Failed to delete item");
