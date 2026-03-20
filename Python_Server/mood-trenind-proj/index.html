@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Mood Tracker</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Mood Tracker Storing files through JSON</h1>
+
+    <!-- Form for creating/updating items -->
+    <div id="itemForm">
+      <select id="moodSelector" name="mood">
+        <option value="happy" selected>Happy</option>
+        <option value="sad">Sad</option>
+        <option value="excited">Excited</option>
+      </select>
+      <input
+        type="text"
+        id="itemInput"
+        placeholder="Write your mood description"
+      />
+      <button id="createBtn">Submit</button>
+      <button id="updateBtn" style="display: none">Update</button>
+      <button id="cancelBtn" style="display: none">Cancel</button>
+    </div>
+
+    <!-- List of items -->
+    <ul id="itemList"></ul>
+
+    <script src="crud_client.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
