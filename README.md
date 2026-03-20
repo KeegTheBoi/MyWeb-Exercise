@@ -1,94 +1,117 @@
-# 🌐 Basic Web App (Flask + HTML + JavaScript)
+# Mood Trending App
 
-## 📌 Overview
+## Overview
 
-This is a simple web application built using **Python (Flask)** for the backend and **HTML + JavaScript** for the frontend. It demonstrates how to connect a lightweight server with a dynamic client-side interface.
+This is a simple web application for tracking and visualizing mood trends over time. Users can log their moods, view historical data, and see trends.
 
----
+## Features
 
-## 🚀 Features
+- Log moods with timestamps
+- View mood history
+- Visualize mood trends
+- Simple and intuitive UI
 
-* Flask backend server
-* REST-style endpoint(s)
-* Dynamic frontend using JavaScript
-* Simple HTML UI
-* Easy to extend and customize
+## Tech Stack
 
----
+- Backend: Python (Flask) + MongoDB
+- Frontend: HTML, JavaScript
+- Database: MongoDB
 
-## 🛠️ Tech Stack
+## Installation
 
-* **Backend:** Python + Flask
-* **Frontend:** HTML, JavaScript
-* **Other:** Fetch API (for client-server communication)
+1. Install Python dependencies:
 
----
+   ```
+   pip install flask pymongo
+   ```
 
-## ⚙️ Installation
+2. Install MongoDB and start the service.
 
-### 1. Clone the repository
+3. Run the server:
 
-```bash
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
+   ```
+   python server.py
+   ```
+
+4. Open your browser to `http://127.0.0.1:5000/`
+
+## Usage
+
+- Select your current mood from the dropdown.
+- Click "Log Mood" to save it.
+- View your mood history and trends below.
+
+## Data Structure
+
+Each mood entry has:
+
+- id: unique identifier
+- mood: mood value (e.g., "happy", "sad")
+- timestamp: when the mood was logged
+
+## Future Improvements
+
+- User authentication
+- More detailed mood categories
+- Advanced analytics and charts
+- Export data functionality
+
+```# Mood Trending App
+
+## Overview
+
+This is a simple web application for tracking and visualizing mood trends over time. Users can log their moods, view historical data, and see trends.
+
+## Features
+
+- Log moods with timestamps
+- View mood history
+- Visualize mood trends
+- Simple and intuitive UI
+
+## Tech Stack
+
+- Backend: Python (Flask) + MongoDB
+- Frontend: HTML, JavaScript
+- Database: MongoDB
+
+## Installation
+
+1. Install Python dependencies:
 ```
 
-### 2. Create a virtual environment (recommended)
-
-```bash
-python -m venv venv
-source venv/bin/activate   # Mac/Linux
-venv\Scripts\activate      # Windows
-```
-
-### 3. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## ▶️ Running the App
-
-```bash
-python app.py
-```
-
-Then open your browser and go to:
+pip install flask pymongo
 
 ```
-http://127.0.0.1:5000/
+
+2. Install MongoDB and start the service.
+
+3. Run the server:
 ```
 
----
-
-## 🧠 Example Code
-
-
-## 📦 requirements.txt
+python server.py
 
 ```
-flask
+
+4. Open your browser to `http://127.0.0.1:5000/`
+
+## Usage
+
+- Select your current mood from the dropdown.
+- Click "Log Mood" to save it.
+- View your mood history and trends below.
+
+## Data Structure
+
+Each mood entry has:
+- id: unique identifier
+- mood: mood value (e.g., "happy", "sad")
+- timestamp: when the mood was logged
+
+## Future Improvements
+
+- User authentication
+- More detailed mood categories
+- Advanced analytics and charts
+- Export data functionality
 ```
-
----
-
-## 🧪 Future Improvements
-
-* Add database integration (SQLite, PostgreSQL)
-* Implement user authentication
-* Improve UI with CSS frameworks (e.g., Bootstrap)
-* Add error handling and logging
-
----
-
-## 🤝 Contributing
-
-Feel free to fork this project and submit pull requests.
-
----
-
-## 📄 License
-
-This project is open-source and available under the MIT License.
