@@ -59,3 +59,7 @@ class CrudClient {
     return response;
   }
 }
+
+// Usage example:
+// const client = new CrudClient("http://localhost:5000/api", "item");
+// client.readAll().then(items => console.log(items));
