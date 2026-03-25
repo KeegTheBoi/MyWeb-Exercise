@@ -1,14 +1,40 @@
 // -------- GENERIC CRUD UI HANDLER --------
 class CrudUIManager {
-  constructor({ client, fields, listElement, formElements, formatItem }) {
+  constructor({ client, div, fields, formatItem }) {
     this.client = client;
     this.fields = fields; // [{name, input, parser?, formatter?}]
-    this.listElement = listElement;
-    this.formElements = formElements; // {createBtn, updateBtn, cancelBtn}
     this.editingId = null;
     this.formatItem = formatItem || ((item) => JSON.stringify(item));
-
+    this.div = div; //upper div
+    this.formElements = this.createCrudForm(div.className); //all the elements related to the form (buttons, list, etc.)
+    this.listElement = this.formElements.listElement; //the element where items are listed
     this.init();
+  }
+
+  createCrudForm(className) {
+    return {
+      createBtn: this.updateWrapper("button", {
+        textContent: "Create",
+        className: `${className}-create-btn}`,
+      }),
+      updateBtn: this.updateWrapper("button", {
+        textContent: "Update",
+        className: `${className}-update-btn`,
+        style: "display:none",
+      }),
+      cancelBtn: this.updateWrapper("button", {
+        textContent: "Cancel",
+        className: `${className}-cancel-btn`,
+        style: "display:none",
+      }),
+      listElement: this.updateWrapper("ul", `${className}-list`),
+    };
+  }
+
+  updateWrapper(tag, props) {
+    const child = Object.assign(document.createElement(tag), props);
+    this.div.appendChild(child);
+    return child;
   }
 
   //#region INIT

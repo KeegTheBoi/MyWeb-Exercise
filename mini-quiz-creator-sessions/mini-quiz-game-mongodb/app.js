@@ -14,21 +14,34 @@ const user_client = new CrudClient(API_BASE, USER_ENTITY_NAME);
 // Helper to create a generic UI manager for any entity
 
 // --------- Quiz entity ---------
-setupEntityUI({
+new CrudUIManager({
   client: quiz_client,
-  listId: "quizList",
-  createBtnId: "createQuizBtn",
-  updateBtnId: "updateQuizBtn",
-  cancelBtnId: "cancelQuizBtn",
+  div: document.querySelector(".quiz-container"),
   fields: [
-    { name: "title", input: document.getElementById("quizTitleInput") },
+    {
+      name: "title",
+      input: Object.assign(document.createElement("input"), {
+        className: "quiz-title-input",
+        placeholder: "Enter your quiz question here",
+        type: "text",
+      }),
+    },
     {
       name: "correctAnswer",
-      input: document.getElementById("quizCorrectInput"),
+      input: Object.assign(document.createElement("input"), {
+        className: "quiz-correct-answer-input",
+        placeholder: "Enter the correct answer",
+        type: "text",
+      }),
     },
     {
       name: "choices",
-      input: document.getElementById("quizChoicesInput"),
+      input: Object.assign(document.createElement("input"), {
+        className: "quiz-choices-input",
+        placeholder: "Enter choices separated by commas",
+        type: "text",
+      }),
+
       parser: (val) => val.split(",").map((s) => s.trim()),
       formatter: (val) => (val ? val.join(", ") : ""),
     },
@@ -42,17 +55,35 @@ setupEntityUI({
     `[${q.date}] (${q.title}) \nChoices: [${q.choices.join(", ")}] \nCorrect: ${q.correctAnswer}`,
 });
 
-// --------- User entity ---------
-setupEntityUI({
+new CrudUIManager({
   client: user_client,
-  listId: "userList",
-  createBtnId: "createUserBtn",
-  updateBtnId: "updateUserBtn",
-  cancelBtnId: "cancelUserBtn",
+  div: document.querySelector(".user-container"),
   fields: [
-    { name: "username", input: document.getElementById("usernameInput") },
-    { name: "email", input: document.getElementById("emailInput") },
-    { name: "score", input: { value: "" }, parser: () => 0 },
+    {
+      name: "username",
+      input: Object.assign(document.createElement("input"), {
+        className: "user-username-input",
+        placeholder: "Enter your username",
+        type: "text",
+      }),
+    },
+    {
+      name: "email",
+      input: Object.assign(document.createElement("input"), {
+        className: "user-email-input",
+        placeholder: "Enter your email",
+        type: "text",
+      }),
+    },
+    {
+      name: "score",
+      input: Object.assign(document.createElement("input"), {
+        className: "user-score-input",
+        placeholder: "Enter your score",
+        type: "number",
+      }),
+      parser: (val) => parseFloat(val) || 0,
+    },
   ],
   formatItem: (u) =>
     `Username: ${u.username}\nEmail: ${u.email}\nScore: ${u.score}`,
