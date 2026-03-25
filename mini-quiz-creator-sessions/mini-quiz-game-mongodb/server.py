@@ -1,6 +1,6 @@
 from logic.quiz_logic import QuizLogic
 from logic.user_logic import UserLogic
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask
 import os
 
 from pymongo import MongoClient

@@ -14,36 +14,54 @@ const user_client = new CrudClient(API_BASE, USER_ENTITY_NAME);
 // Helper to create a generic UI manager for any entity
 
 // --------- Quiz entity ---------
+
+function createFieldFromTemplate({
+  className,
+  placeholder,
+  parser,
+  formatter,
+}) {
+  const template = document.querySelector("#crud-item-template");
+  const clone = template.content.cloneNode(true);
+
+  const input = clone.querySelector("input");
+
+  input.className = className;
+  input.placeholder = placeholder;
+
+  return { wrapper: clone, input, parser, formatter };
+}
+
+function extractDivFromTemplate(htmlTag) {
+  return document.querySelector(htmlTag);
+}
+
 new CrudUIManager({
   client: quiz_client,
-  div: document.querySelector(".quiz-container"),
+  div: extractDivFromTemplate(".quiz-container"),
   fields: [
     {
       name: "title",
-      input: Object.assign(document.createElement("input"), {
+      ...createFieldFromTemplate({
         className: "quiz-title-input",
         placeholder: "Enter your quiz question here",
-        type: "text",
-      }),
-    },
-    {
-      name: "correctAnswer",
-      input: Object.assign(document.createElement("input"), {
-        className: "quiz-correct-answer-input",
-        placeholder: "Enter the correct answer",
-        type: "text",
       }),
     },
     {
       name: "choices",
-      input: Object.assign(document.createElement("input"), {
+      ...createFieldFromTemplate({
         className: "quiz-choices-input",
         placeholder: "Enter choices separated by commas",
-        type: "text",
+        parser: (val) => val.split(",").map((s) => s.trim()),
+        formatter: (val) => (val ? val.join(", ") : ""),
       }),
-
-      parser: (val) => val.split(",").map((s) => s.trim()),
-      formatter: (val) => (val ? val.join(", ") : ""),
+    },
+    {
+      name: "correctAnswer",
+      ...createFieldFromTemplate({
+        className: "quiz-correct-answer-input",
+        placeholder: "Enter the correct answer",
+      }),
     },
     {
       name: "date",
@@ -55,36 +73,27 @@ new CrudUIManager({
     `[${q.date}] (${q.title}) \nChoices: [${q.choices.join(", ")}] \nCorrect: ${q.correctAnswer}`,
 });
 
+// --------- User entity ---------
 new CrudUIManager({
   client: user_client,
-  div: document.querySelector(".user-container"),
+  div: extractDivFromTemplate(".user-container"),
   fields: [
     {
       name: "username",
-      input: Object.assign(document.createElement("input"), {
-        className: "user-username-input",
-        placeholder: "Enter your username",
-        type: "text",
+      ...createFieldFromTemplate({
+        className: "user-name-input",
+        placeholder: "Enter username",
       }),
     },
     {
       name: "email",
-      input: Object.assign(document.createElement("input"), {
+      ...createFieldFromTemplate({
         className: "user-email-input",
-        placeholder: "Enter your email",
-        type: "text",
+        placeholder: "Enter email",
       }),
     },
-    {
-      name: "score",
-      input: Object.assign(document.createElement("input"), {
-        className: "user-score-input",
-        placeholder: "Enter your score",
-        type: "number",
-      }),
-      parser: (val) => parseFloat(val) || 0,
-    },
+    { name: "score", input: { value: "" }, parser: () => 0 },
   ],
   formatItem: (u) =>
-    `Username: ${u.username}\nEmail: ${u.email}\nScore: ${u.score}`,
+    `User: ${u.username} \nMail:(${u.email}) \n- Score: ${u.score}`,
 });

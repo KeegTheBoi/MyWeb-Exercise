@@ -1,40 +1,48 @@
 body {
   font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
   background-color: black;
   color: whitesmoke;
 }
 
-#itemForm {
+.main-content {
   display: flex;
-  margin-bottom: 20px;
-  gap: 10px; /* space between input and select */
+  flex-direction: column;
+  justify-content: center; /* space between quiz and user sections */
+  align-items: center; /* vertical alignment */
+  gap: 15px; /* space between input and select */
+  height: 100vh; /* full viewport height */
+  box-sizing: border-box; /* include padding and border in height */
+}
+
+.main-content h1 {
+  display: flex;
+  justify-content: center; /* space between quiz and user sections */
   align-items: center; /* vertical alignment */
 }
 
-#itemInput {
-  padding: 8px;
-  background-color: cadetblue;
-  color: black;
-  font-size: medium;
+.quiz-container,
+.user-container {
+  border-color: yellow;
+  border-width: 1px;
+  border-style: solid;
 }
 
 input {
   height: 35px; /* same height */
   line-height: 35px; /* match vertical text alignment */
-  padding: 0 10px; /* horizontal padding */
-  font-size: 16px; /* match font size */
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box; /* includes padding & border in height */
   appearance: none;
+
+  margin: 8px;
+  background-color: cadetblue;
+  color: black;
+  font-size: 16px;
 }
 
 ul {
   list-style-type: none;
-  padding: 0;
 }
 
 li {
@@ -60,6 +68,7 @@ button {
   cursor: pointer;
   transition: all 0.2s ease; /* smooth hover transition */
   outline: none;
+  margin: 10px;
 }
 
 /* Hover effect */

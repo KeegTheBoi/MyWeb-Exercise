@@ -12,6 +12,10 @@ class CrudUIManager {
   }
 
   createCrudForm(className) {
+    this.fields
+      .filter((f) => f.input.tagName == "INPUT") // Only process actual input elements
+      .forEach((field) => this.div.appendChild(field.input));
+
     return {
       createBtn: this.updateWrapper("button", {
         textContent: "Create",
@@ -20,12 +24,10 @@ class CrudUIManager {
       updateBtn: this.updateWrapper("button", {
         textContent: "Update",
         className: `${className}-update-btn`,
-        style: "display:none",
       }),
       cancelBtn: this.updateWrapper("button", {
         textContent: "Cancel",
         className: `${className}-cancel-btn`,
-        style: "display:none",
       }),
       listElement: this.updateWrapper("ul", `${className}-list`),
     };
@@ -50,6 +52,9 @@ class CrudUIManager {
     this.formElements.cancelBtn.addEventListener("click", () =>
       this.cancelEdit(),
     );
+
+    this.formElements.updateBtn.style.display = "none";
+    this.formElements.cancelBtn.style.display = "none";
   }
   //#endregion
 
@@ -58,6 +63,8 @@ class CrudUIManager {
     const data = {};
 
     this.fields.forEach((field) => {
+      this.ensureFieldIsCorrectlyDefined(field);
+
       let value = field.input.value;
 
       // CUSTOM PARSER HOOK (modify per field if needed)
@@ -72,13 +79,24 @@ class CrudUIManager {
 
     return data;
   }
+
+  ensureFieldIsCorrectlyDefined(field) {
+    if (!field.name) {
+      throw new Error("Each field must have a 'name' property");
+    }
+    if (field.input.value === undefined) {
+      throw new Error(
+        `Field '${field.name}' input element must have a 'value' property`,
+      );
+    }
+  }
   //#endregion
 
   //#region LOAD & DISPLAY
   async loadItems() {
     try {
-      console.log("Loading items...");
       const items = await this.client.readAll();
+      console.log("Items loaded:", items);
       this.renderList(items);
     } catch {
       alert("Failed to load items");
@@ -112,6 +130,8 @@ class CrudUIManager {
   //#region CREATE
   async createItem() {
     const data = this.collectData();
+
+    console.log("Creating item with data:", data);
 
     try {
       await this.client.create(data);
