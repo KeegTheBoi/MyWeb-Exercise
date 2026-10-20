@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz_Creator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="userCreator">
+      <h1>Creating Quizzes</h1>
+
+      <!-- Form for creating/updating items -->
+      <div id="itemForm">
+        <input
+          type="text"
+          id="quizTitleInput"
+          placeholder="Enter your quiz question here"
+        />
+
+        <input
+          type="text"
+          id="quizChoicesInput"
+          placeholder="Write your answer choices (comma-separated)"
+        />
+
+        <input
+          type="text"
+          id="quizCorrectInput"
+          placeholder="Write the correct answer"
+        />
+
+        <button id="createQuizBtn">Submit</button>
+        <button id="updateQuizBtn" style="display: none">Update</button>
+        <button id="cancelQuizBtn" style="display: none">Cancel</button>
+      </div>
+
+      <!-- List of items -->
+      <ul id="quizList"></ul>
+    </div>
+
+    <h1>Creating Users</h1>
+
+      <!-- Form for creating/updating items -->
+      <div id="userForm">
+        <input
+          type="text"
+          id="usernameInput"
+          placeholder="Enter your username"
+        />
+
+        <input
+          type="text"
+          id="emailInput"
+          placeholder="Enter your email"
+        />
+
+        <button id="createUserBtn">Submit</button>
+        <button id="updateUserBtn" style="display: none">Update</button>
+        <button id="cancelUserBtn" style="display: none">Cancel</button>
+      </div>
+
+      <!-- List of items -->
+      <ul id="userList"></ul>
+    </div>
+
+    <script src="crud_js/crud_ui_manager.js"></script>
+    <script src="crud_js/crud_entity_ui_setup.js"></script>
+    <script src="crud_js/crud_client.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
