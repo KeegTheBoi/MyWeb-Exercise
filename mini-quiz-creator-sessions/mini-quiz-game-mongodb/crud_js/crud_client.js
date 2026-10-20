@@ -15,7 +15,28 @@ class CrudClient {
       return await response.json();
     } catch (error) {
       console.error("API Error:", error);
-      throw error; // Re-throw to let caller handle
+      if (error instanceof TypeError) {
+        const apiUrl = new URL(this.apiBase, window.location.href);
+        const loopbackHosts = ["localhost", "127.0.0.1", "::1", "[::1]"];
+        const pageHost = window.location.hostname;
+
+        if (
+          loopbackHosts.includes(pageHost) &&
+          loopbackHosts.includes(apiUrl.hostname) &&
+          pageHost !== apiUrl.hostname
+        ) {
+          throw new Error(
+            `The page is using "${pageHost}" but the API uses "${apiUrl.hostname}". Use the same hostname for both (localhost or 127.0.0.1).`,
+            { cause: error },
+          );
+        }
+
+        throw new Error(
+          `Could not reach the API at ${apiUrl.origin}. Check that the server is running and that the page and API have matching origins or CORS permissions.`,
+          { cause: error },
+        );
+      }
+      throw error;
     }
   }
 

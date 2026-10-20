@@ -98,8 +98,8 @@ class CrudUIManager {
       const items = await this.client.readAll();
       console.log("Items loaded:", items);
       this.renderList(items);
-    } catch {
-      alert("Failed to load items");
+    } catch (error) {
+      alert(error.message || "Failed to load items");
     }
   }
 
