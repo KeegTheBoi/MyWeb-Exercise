@@ -1,13 +1,14 @@
 // App-specific logic using the generic CrudClient
 // This file handles UI interactions and uses the CrudClient for API calls
 
-const API_BASE = "http://localhost:5000/api";
+const API_URL_LOCALHOST = "http://localhost:5000/api";
+const API_URL_PORT_FOWARD = "https://frzs4jpf-5000.eun1.devtunnels.ms/api";
 const QUIZ_ENTITY_NAME = "quiz"; // Change this for different entities
 const USER_ENTITY_NAME = "user"; // Change this for different entities
 
-const quiz_client = new CrudClient(API_BASE, QUIZ_ENTITY_NAME);
+const quiz_client = new CrudClient(API_URL_PORT_FOWARD, QUIZ_ENTITY_NAME);
 
-const user_client = new CrudClient(API_BASE, USER_ENTITY_NAME);
+const user_client = new CrudClient(API_URL_PORT_FOWARD, USER_ENTITY_NAME);
 
 //#region Quiz management View Display
 
