@@ -20,22 +20,21 @@
     
         <div class="main-content">
             <main>
-                <h1>Register Page</h1>
-                <p>Fill out the form below to create an account.</p>
-                <form id="registerForm">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
-    
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-    
-                    <button type="submit">Register</button>
-    
+                <div class="user-container">
+                    <h1>Register Page</h1>
+                    <p>Fill out the form below to create an account.</p>
+                    <template id="crud-item-template">
+                        <input type="text" />
+                    </template>
+                </div>
             </main>
         </div>
     
     </header>
 
-    <script src="js/quiz_creation.js"></script>
+    <script src="crud_js/crud_ui_manager.js"></script>
+    <script src="crud_js/crud_client.js"></script>
+    <script src="js/register.js"></script>
+    
 </body>
 </html>

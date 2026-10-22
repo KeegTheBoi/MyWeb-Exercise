@@ -1,10 +1,11 @@
 // -------- GENERIC CRUD UI HANDLER --------
 class CrudUIManager {
-  constructor({ client, div, fields, formatItem }) {
+  constructor({ client, div, fields, formatItem, createOnly = false }) {
     this.client = client;
     this.fields = fields; // [{name, input, parser?, formatter?}]
     this.editingId = null;
     this.formatItem = formatItem || ((item) => JSON.stringify(item));
+    this.createOnly = createOnly;
     this.div = div; //upper div
     this.formElements = this.createCrudForm(div.className); //all the elements related to the form (buttons, list, etc.)
     this.listElement = this.formElements.listElement; //the element where items are listed
@@ -16,7 +17,16 @@ class CrudUIManager {
       .filter((f) => f.input.tagName == "INPUT") // Only process actual input elements
       .forEach((field) => this.div.appendChild(field.input));
 
-    return {
+    if (this.createOnly) {
+      return {
+        createBtn: this.updateWrapper("button", {
+          textContent: "Create",
+          className: `${className}-create-btn}`,
+        }),
+      };
+    }
+
+    const formElements = {
       createBtn: this.updateWrapper("button", {
         textContent: "Create",
         className: `${className}-create-btn}`,
@@ -31,6 +41,7 @@ class CrudUIManager {
       }),
       listElement: this.updateWrapper("ul", `${className}-list`),
     };
+    return formElements;
   }
 
   updateWrapper(tag, props) {
@@ -41,11 +52,15 @@ class CrudUIManager {
 
   //#region INIT
   init() {
-    document.addEventListener("DOMContentLoaded", () => this.loadItems());
+    if (!this.createOnly) {
+      document.addEventListener("DOMContentLoaded", () => this.loadItems());
+    }
 
     this.formElements.createBtn.addEventListener("click", () =>
       this.createItem(),
     );
+    if (this.createOnly) return;
+
     this.formElements.updateBtn.addEventListener("click", () =>
       this.updateItem(),
     );
@@ -94,6 +109,8 @@ class CrudUIManager {
 
   //#region LOAD & DISPLAY
   async loadItems() {
+    if (this.createOnly) return;
+
     try {
       const items = await this.client.readAll();
       console.log("Items loaded:", items);
@@ -136,7 +153,7 @@ class CrudUIManager {
     try {
       await this.client.create(data);
       this.resetForm();
-      this.loadItems();
+      if (!this.createOnly) this.loadItems();
     } catch {
       alert("Failed to create item");
     }
