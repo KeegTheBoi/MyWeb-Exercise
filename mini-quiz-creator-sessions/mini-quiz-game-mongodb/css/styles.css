@@ -4,6 +4,7 @@ body {
   color: whitesmoke;
 }
 
+
 .main-content {
   display: flex;
   flex-direction: column;
@@ -46,8 +47,6 @@ ul {
 }
 
 li {
-  padding: 10px;
-  border: 1px solid #ccc;
   margin-bottom: 5px;
   display: flex;
   justify-content: space-between;
@@ -84,3 +83,66 @@ button:active {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
   transform: translateY(0);
 }
+
+.login-btn {
+  background: #c12e06; /* Apple-grey style */
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 24px; /* nice padding */
+  border: none;
+  border-radius: 12px; /* rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* subtle shadow */
+  cursor: pointer;
+  transition: all 0.2s ease; /* smooth hover transition */
+  outline: none;
+}
+
+.login-btn:hover {
+  background: #ee3907; /* slightly darker red */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.login-btn:active {
+  background: #7a1e03;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 18px 8%;
+    background-color: #172033;
+}
+
+.logo {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    color: #d1d5db;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+    color: white;
+}
+

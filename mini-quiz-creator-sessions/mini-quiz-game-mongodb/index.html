@@ -3,26 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quiz_Creator</title>
-    <link rel="stylesheet" href="styles.css" />
+    <title>Super Quiz</title>
+    <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
-    <div class="main-content">
-      <div class="quiz-container">
-        <h1>Quiz Creator</h1>
-      </div>
+    <header>
+      
+        <nav class="navbar">
+          <a href="index.html" class="logo">Super Quiz</a>
+        
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="quiz_creation.html">Quiz Creation</a></li>
+            <li><a class="login-btn" href="login.html">Login</a></li>
+          </ul>
+        </nav>
 
-      <div class="user-container">
-        <h1>User Creator</h1>
-      </div>
-    </div>
+        <div class="main-content">
+          <main>
+            <h1>Simple Super Quiz Game</h1>
+            <p>Welcome to the Super Quiz Game! Test your knowledge and have fun!</p>
+            <p>To create a quiz, please log in as an admin.</p>
 
-    <template id="crud-item-template">
-      <input type="text" />
-    </template>
+          </main>
+        </div>
+    </header>
 
-    <script src="crud_js/crud_ui_manager.js"></script>
-    <script src="crud_js/crud_client.js"></script>
+    
+
+    <footer>
+        © Super Quiz 2026. All rights reserved.
+    </footer>
+
     <script src="app.js"></script>
   </body>
 </html>
