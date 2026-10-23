@@ -11,8 +11,11 @@ class CrudClient {
   async apiRequest(endpoint, options = {}) {
     try {
       const response = await fetch(`${this.apiBase}${endpoint}`, options);
-      if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-      return await response.json();
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || `HTTP error: ${response.status}`);
+      }
+      return data;
     } catch (error) {
       console.error("API Error:", error);
       if (error instanceof TypeError) {

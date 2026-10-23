@@ -30,6 +30,12 @@ This is a generic template for CRUD (Create, Read, Update, Delete) operations th
 4. **Run the Server**:
    - `python server.py`
 
+## User Registration
+
+Registration uses the dedicated `POST /api/register` endpoint instead of the generic user CRUD routes. The browser checks the email, requires a password with at least 8 characters including an uppercase letter, a lowercase letter, and a number, and asks the user to confirm it. The server repeats the validation, normalizes email addresses, enforces uniqueness in MongoDB, and stores only a Werkzeug password hash. Passwords and hashes are never included in API responses.
+
+Serve the registration page and API over HTTPS outside local development so the password is protected in transit.
+
 ## Example for Quotes
 
 To adapt for quotes (like the original example):

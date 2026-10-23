@@ -1,10 +1,11 @@
 from logic.quiz_logic import QuizLogic
-from logic.user_logic import UserLogic
+from logic.user_registration import UserRegistrationLogic
 from flask import Flask
 import os
 
 from pymongo import MongoClient
 from logic.generic_api import GenericAPI
+from logic.registration_api import RegistrationAPI
 
 app = Flask(__name__)
 
@@ -24,9 +25,13 @@ user_collection = db["users"]      # collection name of users
 
 quiz_manager = QuizLogic(quiz_collection)
 
-user_manager = UserLogic(user_collection)
-
-user_api = GenericAPI(app, user_manager, "user", base_dir=BASE_DIR)
+user_collection.create_index(
+    "email",
+    unique=True,
+    partialFilterExpression={"email": {"$type": "string"}},
+)
+registration_manager = UserRegistrationLogic(user_collection)
+registration_api = RegistrationAPI(app, registration_manager)
 
 quiz_api = GenericAPI(app, quiz_manager, ENTITY_NAME, base_dir=BASE_DIR)
 quiz_api.register_static_routes()

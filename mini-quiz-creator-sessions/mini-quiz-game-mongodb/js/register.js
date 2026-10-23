@@ -1,17 +1,15 @@
 
-const API_URL_LOCALHOST = "http://localhost:5000/api";//Works only local
-const API_URL_PORT_FOWARD = "https://frzs4jpf-5000.eun1.devtunnels.ms/api";
-
-const USER_ENTITY_NAME = "user"; // Change this for different entities
-
-
-const user_client = new CrudClient(API_URL_PORT_FOWARD, USER_ENTITY_NAME);
+const USER_ENTITY_NAME = "user";
+const user_client = new CrudClient("/api", USER_ENTITY_NAME);
 
 function createFieldFromTemplate({
   className,
   placeholder,
-  parser,
-  formatter,
+  type = "text",
+  autocomplete,
+  pattern,
+  minLength,
+  maxLength = 254,
 }) {
   const template = document.querySelector("#crud-item-template");
   const clone = template.content.cloneNode(true);
@@ -19,37 +17,61 @@ function createFieldFromTemplate({
   const input = clone.querySelector("input");
 
   input.className = className;
+  input.id = className;
   input.placeholder = placeholder;
+  input.type = type;
+  input.autocomplete = autocomplete || "";
+  input.required = true;
+  if (pattern) input.pattern = pattern;
+  if (minLength) input.minLength = minLength;
+  input.maxLength = maxLength;
 
-  return { wrapper: clone, input, parser, formatter };
+  return { wrapper: clone, input };
 }
 
 function extractDivFromTemplate(htmlTag) {
   return document.querySelector(htmlTag);
 }
 
-// --------- User entity ---------
-new CrudUIManager({
+const passwordPolicy = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,128}";
+
+new RegistrationFormManager({
   client: user_client,
   div: extractDivFromTemplate(".user-container"),
-  createOnly: true,
   fields: [
     {
-      name: "username",
-      ...createFieldFromTemplate({
-        className: "user-name-input",
-        placeholder: "Enter username",
-      }),
-    },
-    {
       name: "email",
+      label: "Email",
       ...createFieldFromTemplate({
         className: "user-email-input",
         placeholder: "Enter email",
+        type: "email",
+        autocomplete: "email",
       }),
     },
-    { name: "score", input: { value: "" }, parser: () => 0 },
+    {
+      name: "password",
+      label: "Password",
+      ...createFieldFromTemplate({
+        className: "user-password-input",
+        placeholder: "Enter password",
+        type: "password",
+        autocomplete: "new-password",
+        pattern: passwordPolicy,
+        minLength: 8,
+        maxLength: 128,
+      }),
+    },
+    {
+      name: "passwordConfirmation",
+      label: "Confirm password",
+      ...createFieldFromTemplate({
+        className: "user-password-confirmation-input",
+        placeholder: "Confirm password",
+        type: "password",
+        autocomplete: "new-password",
+        maxLength: 128,
+      }),
+    },
   ],
-  formatItem: (u) =>
-    `User: ${u.username} \nMail:(${u.email}) \n- Score: ${u.score}`,
 });

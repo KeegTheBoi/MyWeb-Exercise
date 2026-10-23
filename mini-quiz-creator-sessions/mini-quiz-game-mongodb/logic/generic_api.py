@@ -66,14 +66,20 @@ class GenericAPI:
         data = request.get_json()
         if not data:
             return self.bad_response("No data provided")
-        self.manager.create(data)
+        try:
+            self.manager.create(data)
+        except ValueError as error:
+            return self.bad_response(str(error))
         return self.good_response(f"{self.entity_name.capitalize()} created successfully", self.manager.read_without_id())
 
     def update_item(self, item_id):
         data = request.get_json()
         if not data:
             return self.bad_response("No data provided")
-        updated_item = self.manager.update(item_id, data)
+        try:
+            updated_item = self.manager.update(item_id, data)
+        except ValueError as error:
+            return self.bad_response(str(error))
         if updated_item:
             return self.good_response(f"{self.entity_name.capitalize()} updated successfully", self.manager.read_without_id())
         return self.bad_response(f"{self.entity_name.capitalize()} not found", status_code=404)

@@ -56,9 +56,16 @@ class CrudUIManager {
       document.addEventListener("DOMContentLoaded", () => this.loadItems());
     }
 
-    this.formElements.createBtn.addEventListener("click", () =>
-      this.createItem(),
-    );
+    if (this.formElements.form) {
+      this.formElements.form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        this.createItem();
+      });
+    } else {
+      this.formElements.createBtn.addEventListener("click", () =>
+        this.createItem(),
+      );
+    }
     if (this.createOnly) return;
 
     this.formElements.updateBtn.addEventListener("click", () =>
@@ -148,8 +155,6 @@ class CrudUIManager {
   async createItem() {
     const data = this.collectData();
 
-    console.log("Creating item with data:", data);
-
     try {
       await this.client.create(data);
       this.resetForm();
@@ -220,4 +225,81 @@ class CrudUIManager {
     });
   }
   //#endregion
+}
+
+class RegistrationFormManager extends CrudUIManager {
+  constructor(options) {
+    super({ ...options, createOnly: true });
+  }
+
+  createCrudForm(className) {
+    const form = document.createElement("form");
+    form.className = `${className}-registration-form`;
+
+    this.fields.forEach((field) => {
+      const label = document.createElement("label");
+      label.htmlFor = field.input.id;
+      label.textContent = field.label;
+
+      form.appendChild(label);
+      form.appendChild(field.input);
+    });
+
+    const createBtn = document.createElement("button");
+    createBtn.type = "submit";
+    createBtn.textContent = "Register";
+    createBtn.className = `${className}-create-btn`;
+    form.appendChild(createBtn);
+    this.div.appendChild(form);
+
+    return { form, createBtn };
+  }
+
+  collectData() {
+    const email = this.fields.find((field) => field.name === "email");
+    const password = this.fields.find((field) => field.name === "password");
+    return {
+      email: email.input.value.trim(),
+      password: password.input.value,
+    };
+  }
+
+  async createItem() {
+    const password = this.fields.find((field) => field.name === "password");
+    const confirmation = this.fields.find(
+      (field) => field.name === "passwordConfirmation",
+    );
+
+    confirmation.input.setCustomValidity(
+      password.input.value === confirmation.input.value
+        ? ""
+        : "Le password non corrispondono.",
+    );
+
+    if (!this.formElements.form.reportValidity()) return;
+
+    try {
+      await this.client.apiRequest("/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(this.collectData()),
+      });
+      this.resetForm();
+      alert("Registrazione completata.");
+    } catch (error) {
+      alert(error.message || "Registrazione non riuscita.");
+    }
+  }
+
+  startEdit() {
+    throw new Error("La registrazione non supporta la modifica degli utenti.");
+  }
+
+  async updateItem() {
+    throw new Error("La registrazione non supporta la modifica degli utenti.");
+  }
+
+  async deleteItem() {
+    throw new Error("La registrazione non supporta la gestione degli utenti.");
+  }
 }
