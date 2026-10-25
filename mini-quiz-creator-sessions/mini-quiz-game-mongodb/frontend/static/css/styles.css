@@ -114,9 +114,22 @@ button:active {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    min-height: 40px;
 
     padding: 18px 8%;
     background-color: #172033;
+}
+
+#site-navigation {
+    visibility: hidden;
+}
+
+#site-navigation.is-ready {
+    visibility: visible;
+}
+
+.nav-error {
+    color: #fca5a5;
 }
 
 .logo {

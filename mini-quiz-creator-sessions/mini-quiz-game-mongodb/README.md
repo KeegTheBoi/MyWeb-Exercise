@@ -1,34 +1,33 @@
-# Generic CRUD Template
+# Mini Quiz Game
 
-This is a generic template for CRUD (Create, Read, Update, Delete) operations that can be easily adapted to any business object.
+## Project structure
 
-## Structure
-
-- `generic_crud_manager.py`: Generic Python class for CRUD operations on JSON data.
-- `server.py`: Flask server with generic API endpoints.
-- `crud_client.js`: Generic JavaScript class for API interactions.
-- `app.js`: Example UI logic using the CrudClient.
-- `index.html`: Basic HTML structure.
-- `styles.css`: Basic styling.
-- `items.json`: Sample data file (initially empty).
+- `backend/server.py`: Flask application and MongoDB configuration.
+- `backend/logic/`: quiz, user, authentication, and API logic.
+- `frontend/templates/`: Jinja-rendered HTML pages.
+- `frontend/static/css/`: shared stylesheets.
+- `frontend/static/js/crud/`: reusable CRUD client and UI.
+- `frontend/static/js/pages/`: JavaScript for individual pages.
+- `frontend/static/js/shared/`: shared site navigation and login-state UI.
+- `frontend/static/js/app.js`: home-page application logic.
+- `README.md`: setup and application notes.
 
 ## How to Use
 
 1. **Configure the Entity**:
-   - In `server.py`, change `ENTITY_NAME` to your entity (e.g., "quote", "product").
-   - In `app.js`, change `ENTITY_NAME` to match.
-   - Adjust field names in `app.js` (e.g., `content` to `quote`).
+   - In `backend/server.py`, change `ENTITY_NAME` to your entity (e.g., "quote", "product").
+   - Update the matching entity name and fields in `frontend/static/js/app.js`.
 
 2. **Customize the Data Structure**:
-   - The manager expects each item to be a dict with an 'id' field.
-   - Add other fields as needed (e.g., 'name', 'description').
+   - Add entity-specific behavior in `backend/logic/`.
+   - Update page markup in `frontend/templates/` and page scripts in `frontend/static/js/pages/`.
 
 3. **Adapt the UI**:
-   - Modify `index.html` for your specific form fields.
-   - Update `app.js` to handle your specific fields and validation.
+   - Shared assets belong under `frontend/static/`; templates use Flask's `url_for('static', filename=...)` to reference them.
 
 4. **Run the Server**:
-   - `python server.py`
+   - From the project root, run `python -m backend.server` (or `python backend/server.py`).
+   - The application serves templates and static assets through Flask, so do not open the HTML files directly from disk.
 
 ## User Registration
 
@@ -46,8 +45,8 @@ Serve the registration and login pages and APIs over HTTPS outside local develop
 
 To adapt for quotes (like the original example):
 
-- Set `ENTITY_NAME = "quote"` in `server.py`.
-- In `app.js`, change `{ content }` to `{ quote }` and adjust display accordingly.
+- Set `ENTITY_NAME = "quote"` in `backend/server.py`.
+- In `frontend/static/js/app.js`, change `{ content }` to `{ quote }` and adjust display accordingly.
 - Rename `items.json` to `quotes.json`.
 
 The business logic is now separated: the GenericCrudManager handles the data operations, and you can extend it or create specific managers if needed.

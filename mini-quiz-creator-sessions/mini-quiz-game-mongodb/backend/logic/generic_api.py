@@ -1,5 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory
-import os
+from flask import Flask, jsonify, render_template, request
 
 class GenericAPI:
     def __init__(
@@ -7,19 +6,16 @@ class GenericAPI:
         app: Flask,
         manager,
         entity_name: str,
-        base_dir: str = None,
         write_authorizer=None,
     ):
         """
         app: Flask instance
         manager: any object that implements create, read_all, read_by_id, update, delete
         entity_name: string, e.g., "quiz", "quote"
-        base_dir: directory for serving static files (optional)
         """
         self.app = app
         self.manager = manager
         self.entity_name = entity_name
-        self.base_dir = base_dir or os.getcwd()
         self.write_authorizer = write_authorizer
         self.register_routes()
 
@@ -132,8 +128,4 @@ class GenericAPI:
     def register_static_routes(self):
         @self.app.route("/")
         def index():
-            return send_from_directory(self.base_dir, "index.html")
-
-        @self.app.route("/<path:filename>")
-        def serve_file(filename):
-            return send_from_directory(self.base_dir, filename)
+            return render_template("index.html")

@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrazione</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <header>
-        <nav id="site-navigation" class="navbar" aria-label="Main navigation"></nav>
+        <nav id="site-navigation" class="navbar" aria-label="Main navigation" aria-busy="true"></nav>
     
         <div class="main-content">
             <main>
@@ -25,10 +25,10 @@
     
     </header>
 
-    <script src="crud_js/crud_ui_manager.js"></script>
-    <script src="crud_js/crud_client.js"></script>
-    <script src="js/register.js"></script>
-    <script src="js/site_navigation.js"></script>
+    <script src="{{ url_for('static', filename='js/crud/crud_ui_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/crud/crud_client.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/register.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/site_navigation.js') }}"></script>
     
 </body>
 </html>

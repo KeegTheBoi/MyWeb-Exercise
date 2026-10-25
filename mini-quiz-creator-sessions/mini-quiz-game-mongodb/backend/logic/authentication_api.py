@@ -1,10 +1,9 @@
-from flask import jsonify, redirect, request, send_from_directory, session
+from flask import jsonify, redirect, render_template, request, session
 
 
 class AuthenticationAPI:
-    def __init__(self, app, user_manager, base_dir):
+    def __init__(self, app, user_manager):
         self.user_manager = user_manager
-        self.base_dir = base_dir
 
         app.add_url_rule(
             "/api/login",
@@ -69,7 +68,7 @@ class AuthenticationAPI:
     def logged_in_page(self):
         if not session.get("user_email"):
             return redirect("/login.html")
-        return send_from_directory(self.base_dir, "users.html")
+        return render_template("users.html")
 
     def quiz_creation_page(self):
         email = session.get("user_email")
@@ -77,7 +76,7 @@ class AuthenticationAPI:
             return redirect("/login.html")
         if not self.user_manager.is_admin(email):
             return redirect("/users.html")
-        return send_from_directory(self.base_dir, "quiz_creation.html")
+        return render_template("quiz_creation.html")
 
     @staticmethod
     def _error(message, status_code=400):

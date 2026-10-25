@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Super Quiz</title>
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
   </head>
   <body>
     <header>
       
-        <nav id="site-navigation" class="navbar" aria-label="Main navigation"></nav>
+        <nav id="site-navigation" class="navbar" aria-label="Main navigation" aria-busy="true"></nav>
 
         <div class="main-content">
           <main>
@@ -27,7 +27,7 @@
         © Super Quiz 2026. All rights reserved.
     </footer>
 
-    <script src="app.js"></script>
-    <script src="js/site_navigation.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/site_navigation.js') }}"></script>
   </body>
 </html>

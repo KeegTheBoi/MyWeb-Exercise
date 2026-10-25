@@ -42,6 +42,8 @@ function renderNavigation() {
   }
 
   navigation.replaceChildren(logo, links);
+  navigation.classList.add("is-ready");
+  navigation.setAttribute("aria-busy", "false");
 }
 
 async function setAuthState(user) {
@@ -50,6 +52,22 @@ async function setAuthState(user) {
   window.dispatchEvent(
     new CustomEvent("authstatechange", { detail: { user: currentUser } }),
   );
+}
+
+function renderNavigationError() {
+  const logo = document.createElement("a");
+  logo.href = "/";
+  logo.className = "logo";
+  logo.textContent = "Super Quiz";
+
+  const message = document.createElement("span");
+  message.className = "nav-error";
+  message.setAttribute("role", "alert");
+  message.textContent = "Unable to load navigation. Refresh to try again.";
+
+  navigation.replaceChildren(logo, message);
+  navigation.classList.add("is-ready");
+  navigation.setAttribute("aria-busy", "false");
 }
 
 async function refreshAuthState() {
@@ -88,7 +106,7 @@ async function logOut() {
 
 window.setAuthState = setAuthState;
 
-renderNavigation();
 refreshAuthState().catch((error) => {
   window.console.error(error);
+  renderNavigationError();
 });

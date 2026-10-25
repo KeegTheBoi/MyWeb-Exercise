@@ -1,23 +1,33 @@
-from logic.quiz_logic import QuizLogic
-from logic.user_registration import UserRegistrationLogic
-from flask import Flask, jsonify, send_from_directory, session
 import os
+import sys
 
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+from flask import Flask, jsonify, render_template, session
 from pymongo import MongoClient
-from logic.generic_api import GenericAPI
-from logic.registration_api import RegistrationAPI
-from logic.authentication_api import AuthenticationAPI
+from backend.logic.authentication_api import AuthenticationAPI
+from backend.logic.generic_api import GenericAPI
+from backend.logic.quiz_logic import QuizLogic
+from backend.logic.registration_api import RegistrationAPI
+from backend.logic.user_registration import UserRegistrationLogic
 
-app = Flask(__name__)
+TEMPLATE_DIR = os.path.join(BASE_DIR, "frontend", "templates")
+STATIC_DIR = os.path.join(BASE_DIR, "frontend", "static")
+
+app = Flask(
+    __name__,
+    template_folder=TEMPLATE_DIR,
+    static_folder=STATIC_DIR,
+    static_url_path="/static",
+)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY") or os.urandom(32)
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 app.config["SESSION_COOKIE_SECURE"] = os.environ.get(
     "SESSION_COOKIE_SECURE", "false"
 ).lower() == "true"
-
-# Current folder
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 # Configuration for the entity (change these for different entities)
 ENTITY_NAME = "quiz"  # e.g., "quote", "product"
@@ -41,7 +51,7 @@ admin_emails = os.environ.get("ADMIN_EMAILS", "").split(",")
 registration_manager = UserRegistrationLogic(user_collection, admin_emails)
 registration_manager.ensure_profile_fields()
 registration_api = RegistrationAPI(app, registration_manager)
-authentication_api = AuthenticationAPI(app, registration_manager, BASE_DIR)
+authentication_api = AuthenticationAPI(app, registration_manager)
 
 def authorize_quiz_write():
     email = session.get("user_email")
@@ -56,14 +66,18 @@ quiz_api = GenericAPI(
     app,
     quiz_manager,
     ENTITY_NAME,
-    base_dir=BASE_DIR,
     write_authorizer=authorize_quiz_write,
 )
 quiz_api.register_static_routes()
 
 @app.route("/login.html")
 def login_page():
-    return send_from_directory(BASE_DIR, "login.html")
+    return render_template("login.html")
+
+
+@app.route("/register.html")
+def register_page():
+    return render_template("register.html")
 
 
 if __name__ == "__main__":
