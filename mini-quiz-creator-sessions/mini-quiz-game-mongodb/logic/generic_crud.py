@@ -60,7 +60,7 @@ class ManagerCRUD:
             {"_id": ObjectId(item_id)},
             {"$set": updated_item}
         )
-        return result.modified_count > 0
+        return result.matched_count > 0
 
     def delete(self, item_id):
         """Delete an item by id."""

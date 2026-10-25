@@ -146,3 +146,175 @@ button:active {
     color: white;
 }
 
+.account-dashboard {
+  width: min(760px, calc(100vw - 48px));
+  box-sizing: border-box;
+  padding: 32px;
+  border: 1px solid #334155;
+  border-radius: 20px;
+  background: #111827;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+}
+
+.account-dashboard .account-eyebrow {
+  margin: 0;
+  color: #60a5fa;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.account-dashboard h1 {
+  margin: 10px 0;
+}
+
+.account-intro {
+  margin: 0;
+  color: #cbd5e1;
+}
+
+.account-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.account-stat {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  background: #1e293b;
+}
+
+.account-stat h2 {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.account-stat-value {
+  margin: 12px 0 0;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.quiz-dashboard {
+  width: min(900px, calc(100vw - 48px));
+}
+
+.quiz-container {
+  margin-top: 28px;
+  padding: 24px;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  background: #0f172a;
+}
+
+.quiz-container h2 {
+  margin-top: 0;
+}
+
+#quiz-crud-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+#quiz-crud-controls label {
+  margin-top: 8px;
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+#quiz-crud-controls input,
+#quiz-crud-controls textarea {
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  background: #1e293b;
+  color: white;
+  font: inherit;
+}
+
+#quiz-crud-controls textarea {
+  resize: vertical;
+}
+
+#quiz-crud-controls input:focus,
+#quiz-crud-controls textarea:focus {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+#quiz-crud-controls > button {
+  justify-self: start;
+  margin: 8px 8px 8px 0;
+  background: #2563eb;
+  color: white;
+}
+
+.nav-links .nav-action {
+  margin: 0;
+  padding: 10px 16px;
+  background: #334155;
+  color: white;
+}
+
+#quiz-crud-controls .quiz-crud-controls-list {
+  display: grid;
+  gap: 12px;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+#quiz-crud-controls .quiz-crud-controls-list li {
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  background: #1e293b;
+}
+
+#quiz-crud-controls .quiz-crud-controls-list li button {
+  margin: 0;
+  padding: 8px 14px;
+}
+
+.quiz-list-heading {
+  margin: 28px 0 12px;
+  color: #cbd5e1;
+  font-size: 1.1rem;
+}
+
+.account-dashboard + #account-message {
+  min-height: 1.5em;
+  color: #fca5a5;
+  text-align: center;
+}
+
+.account-page .main-content {
+  height: auto;
+  min-height: calc(100vh - 76px);
+  padding: 48px 0;
+}
+
+@media (max-width: 640px) {
+  .account-dashboard {
+    padding: 24px;
+  }
+
+  .account-stats {
+    grid-template-columns: 1fr;
+  }
+}

@@ -13,15 +13,20 @@ class CrudUIManager {
   }
 
   createCrudForm(className) {
-    this.fields
-      .filter((f) => f.input.tagName == "INPUT") // Only process actual input elements
-      .forEach((field) => this.div.appendChild(field.input));
+    this.fields.forEach((field) => {
+      const label = this.updateWrapper("label", {
+        htmlFor: field.input.id,
+        textContent: field.label || field.name,
+      });
+      this.div.appendChild(label);
+      this.div.appendChild(field.input);
+    });
 
     if (this.createOnly) {
       return {
         createBtn: this.updateWrapper("button", {
           textContent: "Create",
-          className: `${className}-create-btn}`,
+          className: `${className}-create-btn`,
         }),
       };
     }
@@ -29,17 +34,21 @@ class CrudUIManager {
     const formElements = {
       createBtn: this.updateWrapper("button", {
         textContent: "Create",
-        className: `${className}-create-btn}`,
+        className: `${className}-create-btn`,
       }),
       updateBtn: this.updateWrapper("button", {
         textContent: "Update",
         className: `${className}-update-btn`,
+        type: "button",
       }),
       cancelBtn: this.updateWrapper("button", {
         textContent: "Cancel",
         className: `${className}-cancel-btn`,
+        type: "button",
       }),
-      listElement: this.updateWrapper("ul", `${className}-list`),
+      listElement: this.updateWrapper("ul", {
+        className: `${className}-list`,
+      }),
     };
     return formElements;
   }
@@ -153,14 +162,15 @@ class CrudUIManager {
 
   //#region CREATE
   async createItem() {
+    if (!this.validateFields()) return;
     const data = this.collectData();
 
     try {
       await this.client.create(data);
       this.resetForm();
       if (!this.createOnly) this.loadItems();
-    } catch {
-      alert("Failed to create item");
+    } catch (error) {
+      alert(error.message || "Failed to create item");
     }
   }
   //#endregion
@@ -184,14 +194,15 @@ class CrudUIManager {
   }
 
   async updateItem() {
+    if (!this.validateFields()) return;
     const data = this.collectData();
 
     try {
       await this.client.update(this.editingId, data);
       this.cancelEdit();
       this.loadItems();
-    } catch {
-      alert("Failed to update item");
+    } catch (error) {
+      alert(error.message || "Failed to update item");
     }
   }
 
@@ -212,13 +223,21 @@ class CrudUIManager {
     try {
       await this.client.delete(id);
       this.loadItems();
-    } catch {
-      alert("Failed to delete item");
+    } catch (error) {
+      alert(error.message || "Failed to delete item");
     }
   }
   //#endregion
 
   //#region HELPERS
+  validateFields() {
+    return this.fields.every((field) => {
+      if (field.input.checkValidity()) return true;
+      field.input.reportValidity();
+      return false;
+    });
+  }
+
   resetForm() {
     this.fields.forEach((field) => {
       field.input.value = "";

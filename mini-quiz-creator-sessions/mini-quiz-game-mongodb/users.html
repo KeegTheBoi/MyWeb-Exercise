@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signed in - Super Quiz</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="account-page">
+    <header>
+      <nav id="site-navigation" class="navbar" aria-label="Main navigation"></nav>
+      <div class="main-content">
+        <main>
+          <section class="account-dashboard" aria-labelledby="account-title">
+            <p class="account-eyebrow">Your account</p>
+            <h1 id="account-title">Welcome to Super Quiz</h1>
+            <p class="account-intro">Here is your player summary.</p>
+            <div class="account-stats">
+              <article class="account-stat">
+                <h2>Email</h2>
+                <p id="signed-in-email" class="account-stat-value">Loading...</p>
+              </article>
+              <article class="account-stat">
+                <h2>Score</h2>
+                <p id="signed-in-score" class="account-stat-value">Loading...</p>
+              </article>
+              <article class="account-stat">
+                <h2>Quizzes completed</h2>
+                <p id="quizzes-completed" class="account-stat-value">Loading...</p>
+              </article>
+              <article class="account-stat">
+                <h2>Account type</h2>
+                <p id="account-role" class="account-stat-value">Loading...</p>
+              </article>
+            </div>
+          </section>
+          <p id="account-message" role="alert" aria-live="polite"></p>
+        </main>
+      </div>
+    </header>
+    <script src="js/logged_in.js"></script>
+    <script src="js/site_navigation.js"></script>
+  </body>
+</html>

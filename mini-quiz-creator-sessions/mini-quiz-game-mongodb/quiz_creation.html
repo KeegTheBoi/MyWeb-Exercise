@@ -3,31 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Creation</title>
+    <title>Quiz Creation - Super Quiz</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body class="account-page">
     <header>
-        <nav class="navbar">
-            <a href="index.html" class="logo">Super Quiz</a>
-    
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="quiz_creation.html">Quiz Creation</a></li>
-                <li><a class="login-btn" href="login.html">Login</a></li>
-            </ul>
-        </nav>
+        <nav id="site-navigation" class="navbar" aria-label="Main navigation"></nav>
     
         <div class="main-content">
             <main>
-                <h1>Create Quiz</h1>
-                <p>You need to be logged in as admin to create a quiz.</p>
-    
+                <section class="account-dashboard quiz-dashboard" aria-labelledby="quiz-title">
+                    <p class="account-eyebrow">Admin workspace</p>
+                    <h1 id="quiz-title">Quiz management</h1>
+                    <p class="account-intro">Create and manage quizzes for Super Quiz.</p>
+                    <section class="quiz-container" aria-label="Quiz form and list">
+                        <h2 id="quiz-form-title">Create a quiz</h2>
+                        <div id="quiz-crud-controls" class="quiz-crud-controls"></div>
+                        <h2 class="quiz-list-heading">Existing quizzes</h2>
+                    </section>
+                </section>
             </main>
         </div>
     
     </header>
 
+    <script src="js/site_navigation.js"></script>
+    <script src="crud_js/crud_client.js"></script>
+    <script src="crud_js/crud_ui_manager.js"></script>
     <script src="js/quiz_creation.js"></script>
 </body>
 </html>

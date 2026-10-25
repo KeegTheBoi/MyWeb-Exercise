@@ -2,7 +2,14 @@ from flask import Flask, request, jsonify, send_from_directory
 import os
 
 class GenericAPI:
-    def __init__(self, app: Flask, manager, entity_name: str, base_dir: str = None):
+    def __init__(
+        self,
+        app: Flask,
+        manager,
+        entity_name: str,
+        base_dir: str = None,
+        write_authorizer=None,
+    ):
         """
         app: Flask instance
         manager: any object that implements create, read_all, read_by_id, update, delete
@@ -13,6 +20,7 @@ class GenericAPI:
         self.manager = manager
         self.entity_name = entity_name
         self.base_dir = base_dir or os.getcwd()
+        self.write_authorizer = write_authorizer
         self.register_routes()
 
     def register_routes(self):
@@ -63,6 +71,10 @@ class GenericAPI:
         return self.bad_response(f"{self.entity_name.capitalize()} not found", status_code=404)
 
     def create_item(self):
+        access_error = self._write_access_error()
+        if access_error:
+            return access_error
+
         data = request.get_json()
         if not data:
             return self.bad_response("No data provided")
@@ -73,6 +85,10 @@ class GenericAPI:
         return self.good_response(f"{self.entity_name.capitalize()} created successfully", self.manager.read_without_id())
 
     def update_item(self, item_id):
+        access_error = self._write_access_error()
+        if access_error:
+            return access_error
+
         data = request.get_json()
         if not data:
             return self.bad_response("No data provided")
@@ -85,10 +101,19 @@ class GenericAPI:
         return self.bad_response(f"{self.entity_name.capitalize()} not found", status_code=404)
 
     def delete_item(self, item_id):
+        access_error = self._write_access_error()
+        if access_error:
+            return access_error
+
         deleted = self.manager.delete(item_id)
         if deleted:
             return self.good_response(f"{self.entity_name.capitalize()} deleted successfully", self.manager.read_without_id())
         return self.bad_response(f"{self.entity_name.capitalize()} not found", status_code=404)
+
+    def _write_access_error(self):
+        if self.write_authorizer is None:
+            return None
+        return self.write_authorizer()
 
     # --------- Custom response helpers ---------
     def good_response(self, message: str, data=None, status_code: int = 200):
