@@ -1,6 +1,7 @@
 from flask import jsonify, request
 
-
+"""Super class to handle the the request and response for the API endpoints. 
+It provides methods to parse JSON requests and generate standardized good and bad responses."""
 class APIResponse:
     @staticmethod
     def parse_json_request(error_message, status_code=400, require_non_empty=False):
@@ -17,10 +18,9 @@ class APIResponse:
         data_key="data",
         **fields,
     ):
-        response = {"success": True, "message": message, **fields}
-        if data is not None:
-            response[data_key] = data
-        return jsonify(response), status_code
+        return APIResponse.response(
+            message, status_code, data, data_key, **fields
+        )
 
     @staticmethod
     def bad_response(
@@ -30,7 +30,19 @@ class APIResponse:
         data_key="data",
         **fields,
     ):
-        response = {"success": False, "message": message, **fields}
+        return APIResponse.response(
+            message, status_code, data, data_key, **fields
+        )
+
+    def response(
+            message,
+            status_code,
+            data,
+            data_key="data",
+            **fields,
+    ):
+        response = {"success": status_code < 400, "message": message, **fields}
         if data is not None:
             response[data_key] = data
         return jsonify(response), status_code
+    
