@@ -8,7 +8,7 @@ loginForm.addEventListener("submit", async (event) => {
   loginSubmit.disabled = true;
 
   try {
-    const response = await fetch("/api/login", {
+    const data = await window.requestJson("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "same-origin",
@@ -17,12 +17,6 @@ loginForm.addEventListener("submit", async (event) => {
         password: loginForm.elements.password.value,
       }),
     });
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Unable to log in.");
-    }
-
     await window.setAuthState(data.user);
     window.location.assign("/users.html");
   } catch (error) {

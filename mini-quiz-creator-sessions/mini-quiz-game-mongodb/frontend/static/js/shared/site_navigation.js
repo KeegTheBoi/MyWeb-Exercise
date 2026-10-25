@@ -71,32 +71,27 @@ function renderNavigationError() {
 }
 
 async function refreshAuthState() {
-  const response = await fetch("/api/session", {
-    credentials: "same-origin",
-  });
-  if (response.status === 401) {
-    await setAuthState(null);
-    return null;
+  try {
+    const data = await window.requestJson("/api/session", {
+      credentials: "same-origin",
+    });
+    await setAuthState(data.user);
+    return data.user;
+  } catch (error) {
+    if (error.status === 401) {
+      await setAuthState(null);
+      return null;
+    }
+    throw error;
   }
-  if (!response.ok) {
-    throw new Error("Unable to load the current login state.");
-  }
-
-  const data = await response.json();
-  await setAuthState(data.user);
-  return data.user;
 }
 
 async function logOut() {
   try {
-    const response = await fetch("/api/logout", {
+    await window.requestJson("/api/logout", {
       method: "POST",
       credentials: "same-origin",
     });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || "Unable to log out. Please try again.");
-    }
     await setAuthState(null);
     window.location.assign("/");
   } catch (error) {

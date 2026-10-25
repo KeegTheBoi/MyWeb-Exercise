@@ -5,12 +5,10 @@ const accountRole = document.querySelector("#account-role");
 const accountMessage = document.querySelector("#account-message");
 
 async function loadCurrentSession() {
-  const response = await fetch("/api/session", {
+  const data = await window.requestJson("/api/session", {
     credentials: "same-origin",
   });
-  const data = await response.json();
-
-  if (!response.ok) {
+  if (!data.user) {
     window.location.assign("/login.html");
     return;
   }
@@ -22,5 +20,9 @@ async function loadCurrentSession() {
 }
 
 loadCurrentSession().catch((error) => {
+  if (error.status === 401) {
+    window.location.assign("/login.html");
+    return;
+  }
   accountMessage.textContent = error.message;
 });
