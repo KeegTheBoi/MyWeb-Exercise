@@ -1,4 +1,3 @@
-from flask import request
 from pymongo.errors import DuplicateKeyError
 
 from .api_response import APIResponse
@@ -16,9 +15,11 @@ class RegistrationAPI(APIResponse):
         )
 
     def register(self):
-        data = request.get_json(silent=True)
-        if not isinstance(data, dict):
-            return self._error("Dati di registrazione mancanti.")
+        data, error_response = self.parse_json_request(
+            "Dati di registrazione mancanti."
+        )
+        if error_response:
+            return error_response
 
         try:
             user = self.registration_manager.register(

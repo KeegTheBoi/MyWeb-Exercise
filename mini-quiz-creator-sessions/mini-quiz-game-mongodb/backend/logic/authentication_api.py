@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, session
 
 from .api_response import APIResponse
 
@@ -37,9 +37,11 @@ class AuthenticationAPI(APIResponse):
         )
 
     def login(self):
-        data = request.get_json(silent=True)
-        if not isinstance(data, dict):
-            return self.bad_response("Please enter your email and password.")
+        data, error_response = self.parse_json_request(
+            "Please enter your email and password."
+        )
+        if error_response:
+            return error_response
 
         user = self.user_manager.authenticate(
             data.get("email"),

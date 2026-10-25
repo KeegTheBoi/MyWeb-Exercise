@@ -1,7 +1,14 @@
-from flask import jsonify
+from flask import jsonify, request
 
 
 class APIResponse:
+    @staticmethod
+    def parse_json_request(error_message, status_code=400, require_non_empty=False):
+        data = request.get_json(silent=True)
+        if isinstance(data, dict) and (data or not require_non_empty):
+            return data, None
+        return None, APIResponse.bad_response(error_message, status_code)
+
     @staticmethod
     def good_response(
         message,

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 
 from .api_response import APIResponse
 
@@ -82,9 +82,12 @@ class GenericAPI(APIResponse):
         if access_error:
             return access_error
 
-        data = request.get_json()
-        if not data:
-            return self.bad_response("No data provided")
+        data, error_response = self.parse_json_request(
+            "No data provided",
+            require_non_empty=True,
+        )
+        if error_response:
+            return error_response
         try:
             self.manager.create(data)
         except ValueError as error:
@@ -100,9 +103,12 @@ class GenericAPI(APIResponse):
         if access_error:
             return access_error
 
-        data = request.get_json()
-        if not data:
-            return self.bad_response("No data provided")
+        data, error_response = self.parse_json_request(
+            "No data provided",
+            require_non_empty=True,
+        )
+        if error_response:
+            return error_response
         try:
             updated_item = self.manager.update(item_id, data)
         except ValueError as error:
