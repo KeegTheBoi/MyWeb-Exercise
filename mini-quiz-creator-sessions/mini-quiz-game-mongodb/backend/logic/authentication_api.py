@@ -1,7 +1,9 @@
-from flask import jsonify, redirect, render_template, request, session
+from flask import redirect, render_template, request, session
+
+from .api_response import APIResponse
 
 
-class AuthenticationAPI:
+class AuthenticationAPI(APIResponse):
     def __init__(self, app, user_manager):
         self.user_manager = user_manager
 
@@ -37,33 +39,32 @@ class AuthenticationAPI:
     def login(self):
         data = request.get_json(silent=True)
         if not isinstance(data, dict):
-            return self._error("Please enter your email and password.")
+            return self.bad_response("Please enter your email and password.")
 
         user = self.user_manager.authenticate(
             data.get("email"),
             data.get("password"),
         )
         if user is None:
-            return self._error("Invalid email or password.", 401)
+            return self.bad_response("Invalid email or password.", 401)
 
         session.clear()
         session["user_email"] = user["email"]
-        return jsonify(success=True, user=user)
+        return self.good_response("Login successful.", user=user)
 
     def current_session(self):
         email = session.get("user_email")
         if not email:
-            return AuthenticationAPI._error("You are not logged in.", 401)
+            return self.bad_response("You are not logged in.", 401)
         user = self.user_manager.get_profile(email)
         if user is None:
             session.clear()
-            return AuthenticationAPI._error("You are not logged in.", 401)
-        return jsonify(success=True, user=user)
+            return self.bad_response("You are not logged in.", 401)
+        return self.good_response("Session retrieved.", user=user)
 
-    @staticmethod
-    def logout():
+    def logout(self):
         session.clear()
-        return jsonify(success=True)
+        return self.good_response("Logged out.")
 
     def logged_in_page(self):
         if not session.get("user_email"):
@@ -78,6 +79,3 @@ class AuthenticationAPI:
             return redirect("/users.html")
         return render_template("quiz_creation.html")
 
-    @staticmethod
-    def _error(message, status_code=400):
-        return jsonify(success=False, message=message), status_code
