@@ -21,6 +21,8 @@ class RegistrationAPI(APIResponse):
         if error_response:
             return error_response
 
+        """Attempting registration and delegating the logic to the registration_manager. 
+        Handling exceptions for duplicate emails and validation errors."""
         try:
             user = self.registration_manager.register(
                 data.get("email"),

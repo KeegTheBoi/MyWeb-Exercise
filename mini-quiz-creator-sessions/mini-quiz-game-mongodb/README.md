@@ -12,6 +12,11 @@
 - `frontend/static/js/app.js`: home-page application logic.
 - `README.md`: setup and application notes.
 
+## Python backend documentation
+
+- [Python Backend Guide (DOCX)](docs/python-backend.docx)
+- [Python Backend Guide and Mermaid UML (Markdown)](docs/python-backend.md)
+
 ## How to Use
 
 1. **Configure the Entity**:
