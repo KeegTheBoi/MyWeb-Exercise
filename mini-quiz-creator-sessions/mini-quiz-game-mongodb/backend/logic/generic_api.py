@@ -1,6 +1,9 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, render_template, request
 
-class GenericAPI:
+from .api_response import APIResponse
+
+
+class GenericAPI(APIResponse):
     def __init__(
         self,
         app: Flask,
@@ -58,12 +61,20 @@ class GenericAPI:
     # --------- Endpoint methods ---------
     def get_all_entries(self):
         items = self.manager.read_all()
-        return self.good_response(f"All {self.entity_name}s retrieved", items)
+        return self.good_response(
+            f"All {self.entity_name}s retrieved",
+            items,
+            data_key=f"{self.entity_name}s",
+        )
 
     def get_item(self, item_id):
         item = self.manager.read_by_id(item_id)
         if item:
-            return self.good_response(f"{self.entity_name.capitalize()} retrieved", item)
+            return self.good_response(
+                f"{self.entity_name.capitalize()} retrieved",
+                item,
+                data_key=self.entity_name,
+            )
         return self.bad_response(f"{self.entity_name.capitalize()} not found", status_code=404)
 
     def create_item(self):
@@ -78,7 +89,11 @@ class GenericAPI:
             self.manager.create(data)
         except ValueError as error:
             return self.bad_response(str(error))
-        return self.good_response(f"{self.entity_name.capitalize()} created successfully", self.manager.read_without_id())
+        return self.good_response(
+            f"{self.entity_name.capitalize()} created successfully",
+            self.manager.read_without_id(),
+            data_key=f"{self.entity_name}s",
+        )
 
     def update_item(self, item_id):
         access_error = self._write_access_error()
@@ -93,7 +108,11 @@ class GenericAPI:
         except ValueError as error:
             return self.bad_response(str(error))
         if updated_item:
-            return self.good_response(f"{self.entity_name.capitalize()} updated successfully", self.manager.read_without_id())
+            return self.good_response(
+                f"{self.entity_name.capitalize()} updated successfully",
+                self.manager.read_without_id(),
+                data_key=f"{self.entity_name}s",
+            )
         return self.bad_response(f"{self.entity_name.capitalize()} not found", status_code=404)
 
     def delete_item(self, item_id):
@@ -103,26 +122,17 @@ class GenericAPI:
 
         deleted = self.manager.delete(item_id)
         if deleted:
-            return self.good_response(f"{self.entity_name.capitalize()} deleted successfully", self.manager.read_without_id())
+            return self.good_response(
+                f"{self.entity_name.capitalize()} deleted successfully",
+                self.manager.read_without_id(),
+                data_key=f"{self.entity_name}s",
+            )
         return self.bad_response(f"{self.entity_name.capitalize()} not found", status_code=404)
 
     def _write_access_error(self):
         if self.write_authorizer is None:
             return None
         return self.write_authorizer()
-
-    # --------- Custom response helpers ---------
-    def good_response(self, message: str, data=None, status_code: int = 200):
-        response = {"success": True, "message": message}
-        if data is not None:
-            response[self.entity_name + "s"] = data
-        return jsonify(response), status_code
-
-    def bad_response(self, message: str, data=None, status_code: int = 400):
-        response = {"success": False, "message": message}
-        if data is not None:
-            response[self.entity_name + "s"] = data
-        return jsonify(response), status_code
 
     # --------- Static file routes ---------
     def register_static_routes(self):

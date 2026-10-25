@@ -1,10 +1,11 @@
-from flask import jsonify, request
+from flask import request
 from pymongo.errors import DuplicateKeyError
 
+from .api_response import APIResponse
 from .user_registration import EmailAlreadyRegistered
 
 
-class RegistrationAPI:
+class RegistrationAPI(APIResponse):
     def __init__(self, app, registration_manager):
         self.registration_manager = registration_manager
         app.add_url_rule(
@@ -25,16 +26,12 @@ class RegistrationAPI:
                 data.get("password"),
             )
         except (EmailAlreadyRegistered, DuplicateKeyError):
-            return self._error("Esiste già un account con questa email.", 409)
+            return self.bad_response("Esiste già un account con questa email.", 409)
         except ValueError as error:
-            return self._error(str(error))
+            return self.bad_response(str(error))
 
-        return jsonify(
-            success=True,
-            message="Registrazione completata.",
+        return self.good_response(
+            "Registrazione completata.",
             user=user,
-        ), 201
-
-    @staticmethod
-    def _error(message, status_code=400):
-        return jsonify(success=False, message=message), status_code
+            status_code=201,
+        )
