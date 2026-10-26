@@ -58,18 +58,23 @@ class GenericAPI(APIResponse):
             endpoint=f"delete_{self.entity_name}"
         )
 
-    # --------- Endpoint methods ---------
-    def get_all_entries(self):
-        items = self.manager.read_all()
+    """ --------- Endpoint methods --------------------------------------------
+    Without knowing the database methods, these methods handle the API requests
+    and responses for CRUD operations on the entity. They use the manager to
+    perform the actual database operations and return standardized responses using
+    the APIResponse methods.
+    """
+    def get_all_entries(self): #collecting all elements from the database
+        items = self.manager.read_all() #items us a collections of dict elements.
         return self.good_response(
             f"All {self.entity_name}s retrieved",
             items,
             data_key=f"{self.entity_name}s",
         )
 
-    def get_item(self, item_id):
+    def get_item(self, item_id): #retrieving a single element from the database given its id ()
         item = self.manager.read_by_id(item_id)
-        if item:
+        if item: 
             return self.good_response(
                 f"{self.entity_name.capitalize()} retrieved",
                 item,
@@ -89,7 +94,7 @@ class GenericAPI(APIResponse):
         if error_response:
             return error_response
         try:
-            self.manager.create(data)
+            self.manager.create(data) #handles database related errors as a value error.
         except ValueError as error:
             return self.bad_response(str(error))
         return self.good_response(

@@ -21,7 +21,7 @@ class UserRegistrationLogic(UserLogic):
         }
 
     def register(self, email, password):
-        if not isinstance(email, str):
+        if not isinstance(email, str): #handles invalid mails
             raise ValueError("Inserisci un indirizzo email valido.")
 
         email = email.strip().lower()
@@ -153,7 +153,7 @@ class UserRegistrationLogic(UserLogic):
             not email
             or len(email) > 254
             or not password
-            or len(password) > self.MAX_PASSWORD_LENGTH
+            or len(password) > self.MAX_PASSWORD_LENGTH #could add a verification or validation process
         ):
             return None
 
@@ -165,7 +165,7 @@ class UserRegistrationLogic(UserLogic):
         if not isinstance(password_hash, str):
             return None
         try:
-            password_is_valid = check_password_hash(password_hash, password)
+            password_is_valid = check_password_hash(password_hash, password) #password hashing api to verify password hashing
         except ValueError:
             return None
         if not password_is_valid:
