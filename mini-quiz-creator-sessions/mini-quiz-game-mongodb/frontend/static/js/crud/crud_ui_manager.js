@@ -240,7 +240,7 @@ class CrudUIManager {
 
   resetForm() {
     this.fields.forEach((field) => {
-      field.input.value = "";
+      field.input.value = field.resetValue ?? "";
     });
   }
   //#endregion
