@@ -16,6 +16,16 @@
             <h1>Simple Super Quiz Game</h1>
             <p>Welcome to the Super Quiz Game! Test your knowledge and have fun!</p>
             <p>Quiz creation is available to admin accounts.</p>
+            <button id="play-quizzes-button" type="button" hidden aria-expanded="false" aria-controls="available-quizzes-panel">
+              Play
+            </button>
+            <section id="available-quizzes-panel" class="account-dashboard available-quizzes-dashboard" aria-labelledby="available-quizzes-title" hidden>
+              <p class="account-eyebrow">Play</p>
+              <h2 id="available-quizzes-title">Available quizzes</h2>
+              <p class="account-intro">Only quizzes published by an admin are shown here.</p>
+              <p id="available-quizzes-message" role="status" aria-live="polite"></p>
+              <ul id="available-quizzes-list" class="available-quizzes-list"></ul>
+            </section>
 
           </main>
         </div>
@@ -29,6 +39,7 @@
 
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     <script src="{{ url_for('static', filename='js/shared/api_request.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/home.js') }}"></script>
     <script src="{{ url_for('static', filename='js/shared/site_navigation.js') }}"></script>
   </body>
 </html>
