@@ -27,7 +27,7 @@ All examples are located in the `Python_Server/` directory and organized by cate
   - User scoring system
   - RESTful API endpoints
 
-**Session-enabled quiz creator:** `mini-quiz-creator-sessions/mini-quiz-game-mongodb/`
+**Session-enabled quiz creator:** `Python_Server/Sessions/mini-quiz-game-mongodb-flask-sessions/`
 
 - Flask sessions and role-based user accounts
 - Admin quiz and user management
@@ -55,6 +55,7 @@ All examples are located in the `Python_Server/` directory and organized by cate
 **Location:** `Python_Server/Sessions/`
 
 - **simple-session-display/**: Basic Flask session handling examples
+- **mini-quiz-game-mongodb-flask-sessions/**: MongoDB quiz app with Flask sessions, roles, and admin management
 
 ### 📋 Template System
 
