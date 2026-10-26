@@ -10,12 +10,14 @@ styles, and JavaScript implementation details are intentionally out of scope.
 | `backend/server.py` | Creates the Flask application, configures MongoDB and sessions, initializes managers and APIs, and defines authorization policy. |
 | `backend/logic/api_response.py` | Shared JSON request parsing and success/error response helpers. |
 | `backend/logic/generic_api.py` | Generic entity CRUD routes and optional write authorization. |
+| `backend/logic/quiz_api.py` | Quiz access rules and the authenticated, not-yet-implemented completion route. |
+| `backend/logic/user_admin_api.py` | Admin-only user listing, role changes, and regular-user deletion routes. |
 | `backend/logic/registration_api.py` | Account registration endpoint and registration-specific error mapping. |
 | `backend/logic/authentication_api.py` | Login, logout, current-session, and protected page routes. |
 | `backend/logic/generic_crud.py` | MongoDB-backed create, read, update, and delete operations. |
 | `backend/logic/user_logic.py` | User CRUD behavior and password hashing/removal. |
 | `backend/logic/user_registration.py` | Email/password validation, registration, authentication, profile lookup, and admin-role lookup. |
-| `backend/logic/quiz_logic.py` | Quiz-specific manager, currently inheriting generic MongoDB CRUD operations. |
+| `backend/logic/quiz_logic.py` | Quiz validation, availability defaults, and MongoDB CRUD operations. |
 
 ## Class diagram
 
@@ -37,6 +39,11 @@ classDiagram
         +update_item(item_id)
         +delete_item(item_id)
     }
+    class QuizAPI {
+        +get_all_entries()
+        +get_item(item_id)
+        +complete_quiz(item_id)
+    }
     class RegistrationAPI {
         +registration_manager
         +register()
@@ -48,6 +55,11 @@ classDiagram
         +logout()
         +logged_in_page()
         +quiz_creation_page()
+    }
+    class UserAdminAPI {
+        +list_users()
+        +update_role(user_id)
+        +delete_user(user_id)
     }
     class ManagerCRUD {
         +collection
@@ -74,6 +86,9 @@ classDiagram
         +get_profile(email)
         +is_admin(email)
         +authenticate(email, password)
+        +list_profiles_for_admin()
+        +set_user_admin_role(user_id, is_admin)
+        +delete_regular_user(user_id)
         +_validate_password(password)$
     }
     class MongoCollection {
@@ -84,8 +99,10 @@ classDiagram
     }
 
     APIResponse <|-- GenericAPI
+    GenericAPI <|-- QuizAPI
     APIResponse <|-- RegistrationAPI
     APIResponse <|-- AuthenticationAPI
+    APIResponse <|-- UserAdminAPI
     ManagerCRUD <|-- QuizLogic
     ManagerCRUD <|-- UserLogic
     UserLogic <|-- UserRegistrationLogic
@@ -97,6 +114,7 @@ classDiagram
     UserRegistrationLogic --> MongoCollection : stores user profiles
     RegistrationAPI --> UserRegistrationLogic : delegates registration
     AuthenticationAPI --> UserRegistrationLogic : delegates authentication
+    UserAdminAPI --> UserRegistrationLogic : manages account roles
 ```
 
 ## Request and response conventions
@@ -145,10 +163,16 @@ Example successful response:
 | `POST` | `/api/quiz` | Creates a quiz; admin session required. |
 | `PUT` | `/api/quiz/<item_id>` | Updates a quiz; admin session required. |
 | `DELETE` | `/api/quiz/<item_id>` | Deletes a quiz; admin session required. |
+| `POST` | `/api/quiz/<item_id>/complete` | Requires a signed-in user and available quiz; returns `501` until gameplay is implemented. |
+| `GET` | `/api/admin/users` | Lists safe user profiles; admin session required. |
+| `PATCH` | `/api/admin/users/<user_id>/role` | Changes another account's admin role; admin session required. |
+| `DELETE` | `/api/admin/users/<user_id>` | Deletes regular user accounts only; admin session required. |
 
-The generic API's reads are currently public. Its write authorizer is injected by
-`server.py`, where the current session is checked against the persisted admin
-role. Authorization is enforced server-side and does not rely on page visibility.
+Quiz reads require a signed-in account. Regular users receive only available
+quizzes; admins can see all quizzes and manage availability. Quiz writes and user
+administration use server-side admin checks rather than relying on page visibility.
+Administrators cannot demote themselves, and admin accounts cannot be deleted by
+the regular-account deletion route.
 
 ## Registration and user data
 
@@ -162,6 +186,11 @@ documents contain:
 | `score` | Numeric player score, initialized to `0`. |
 | `quiz_completed` | Completed quiz count, initialized to `0`. |
 | `is_admin` | Admin role flag; false by default unless configured as an admin. |
+
+Quiz documents have an `is_available` boolean. New quizzes default to available;
+existing documents are backfilled as available at startup. Admins can publish or
+hide quizzes. Hidden quizzes are not returned to regular users and cannot be
+completed through the completion endpoint.
 
 At startup, missing score, completion-count, and admin fields are backfilled.
 `ADMIN_EMAILS` is a comma-separated list: matching existing accounts are promoted,
@@ -190,9 +219,10 @@ MongoDB URL by default (`mongodb://localhost:27017`) and stores data in database
 | `SESSION_COOKIE_SECURE` | Set to `true` when serving over HTTPS to restrict session cookies to secure transport. |
 | `ADMIN_EMAILS` | Comma-separated emails to provision as admins. |
 
-The current quiz manager persists quiz documents but does not yet define a quiz
-attempt/completion workflow. Consequently, this backend does not increment
-`score` or `quiz_completed` when a quiz is created.
+The completion endpoint is a scaffold only: it checks authentication and quiz
+availability, then returns HTTP `501`. TODO markers identify where answer checking,
+scoring, attempt persistence, and profile-stat updates belong. Creating a quiz
+does not increment `score` or `quiz_completed`.
 
 ## Main backend flows
 
@@ -212,4 +242,3 @@ sequenceDiagram
     Manager->>Mongo: Insert normalized profile + password hash
     API-->>Client: good_response(user, HTTP 201)
 ```
-

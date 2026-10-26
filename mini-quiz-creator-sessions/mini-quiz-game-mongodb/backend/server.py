@@ -11,6 +11,8 @@ from backend.logic.authentication_api import AuthenticationAPI
 from backend.logic.generic_api import GenericAPI
 from backend.logic.quiz_logic import QuizLogic
 from backend.logic.registration_api import RegistrationAPI
+from backend.logic.quiz_api import QuizAPI
+from backend.logic.user_admin_api import UserAdminAPI
 from backend.logic.user_registration import UserRegistrationLogic
 
 TEMPLATE_DIR = os.path.join(BASE_DIR, "frontend", "templates")
@@ -41,6 +43,7 @@ quiz_collection = db["quizzes"]    # collection name of quizzes
 user_collection = db["users"]      # collection name of users
 
 quiz_manager = QuizLogic(quiz_collection)
+quiz_manager.ensure_availability_fields()
 
 user_collection.create_index(
     "email",
@@ -62,12 +65,22 @@ def authorize_quiz_write():
     return None
 
 
-quiz_api = GenericAPI(
+def authorize_admin():
+    email = session.get("user_email")
+    if not email:
+        return jsonify(success=False, message="Log in as an admin to continue."), 401
+    if not registration_manager.is_admin(email):
+        return jsonify(success=False, message="Only admins can manage users."), 403
+    return None
+
+
+quiz_api = QuizAPI(
     app,
     quiz_manager,
-    ENTITY_NAME,
-    write_authorizer=authorize_quiz_write,
+    authorize_quiz_write,
+    registration_manager,
 )
+user_admin_api = UserAdminAPI(app, registration_manager, authorize_admin)
 quiz_api.register_static_routes()
 
 @app.route("/login.html")

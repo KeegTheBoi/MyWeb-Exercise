@@ -1,5 +1,7 @@
 import re
 
+from bson import ObjectId
+from bson.errors import InvalidId
 from werkzeug.security import check_password_hash
 
 from .user_logic import UserLogic
@@ -67,6 +69,54 @@ class UserRegistrationLogic(UserLogic):
         if not user:
             return None
 
+        return self._to_profile(user)
+
+    def list_profiles_for_admin(self):
+        users = self.collection.find(
+            {},
+            {"email": 1, "score": 1, "quiz_completed": 1, "is_admin": 1},
+        )
+        return [self._to_profile(user, include_id=True) for user in users]
+
+    def get_admin_profile(self, user_id):
+        try:
+            object_id = ObjectId(user_id)
+        except (InvalidId, TypeError):
+            return None
+
+        user = self.collection.find_one(
+            {"_id": object_id},
+            {"email": 1, "score": 1, "quiz_completed": 1, "is_admin": 1},
+        )
+        return self._to_profile(user, include_id=True) if user else None
+
+    def set_user_admin_role(self, user_id, is_admin):
+        try:
+            object_id = ObjectId(user_id)
+        except (InvalidId, TypeError):
+            return None
+
+        result = self.collection.update_one(
+            {"_id": object_id},
+            {"$set": {"is_admin": is_admin}},
+        )
+        if not result.matched_count:
+            return None
+        return self.get_admin_profile(user_id)
+
+    def delete_regular_user(self, user_id):
+        try:
+            object_id = ObjectId(user_id)
+        except (InvalidId, TypeError):
+            return False
+
+        result = self.collection.delete_one(
+            {"_id": object_id, "is_admin": {"$ne": True}},
+        )
+        return result.deleted_count > 0
+
+    @staticmethod
+    def _to_profile(user, include_id=False):
         score = user.get("score", 0)
         if isinstance(score, bool) or not isinstance(score, (int, float)):
             score = 0
@@ -80,12 +130,15 @@ class UserRegistrationLogic(UserLogic):
             quiz_completed = 0
         is_admin = user.get("is_admin") is True
 
-        return {
+        profile = {
             "email": user["email"],
             "score": score,
             "quiz_completed": quiz_completed,
             "is_admin": is_admin,
         }
+        if include_id:
+            profile["_id"] = str(user["_id"])
+        return profile
 
     def is_admin(self, email):
         user = self.collection.find_one({"email": email}, {"is_admin": 1})
