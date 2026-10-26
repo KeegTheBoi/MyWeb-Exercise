@@ -1,0 +1,405 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: black;
+  color: whitesmoke;
+}
+
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* space between quiz and user sections */
+  align-items: center; /* vertical alignment */
+  gap: 15px; /* space between input and select */
+  height: 100vh; /* full viewport height */
+  box-sizing: border-box; /* include padding and border in height */
+}
+
+.main-content h1 {
+  display: flex;
+  justify-content: center; /* space between quiz and user sections */
+  align-items: center; /* vertical alignment */
+}
+
+.quiz-container,
+.user-container {
+  border-color: yellow;
+  border-width: 1px;
+  border-style: solid;
+}
+
+input {
+  height: 35px; /* same height */
+  line-height: 35px; /* match vertical text alignment */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* includes padding & border in height */
+  appearance: none;
+
+  margin: 8px;
+  background-color: cadetblue;
+  color: black;
+  font-size: 16px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: pre-line;
+}
+
+/* Modern rounded Apple-style button */
+button {
+  background: #898b8e; /* Apple-grey style */
+  color: black;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 24px; /* nice padding */
+  border: none;
+  border-radius: 12px; /* rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* subtle shadow */
+  cursor: pointer;
+  transition: all 0.2s ease; /* smooth hover transition */
+  outline: none;
+  margin: 10px;
+}
+
+/* Hover effect */
+button:hover {
+  background: #005bb5; /* slightly darker blue */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Active / click effect */
+button:active {
+  background: #004494;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+}
+
+.login-btn {
+  background: #c12e06; /* Apple-grey style */
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 24px; /* nice padding */
+  border: none;
+  border-radius: 12px; /* rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* subtle shadow */
+  cursor: pointer;
+  transition: all 0.2s ease; /* smooth hover transition */
+  outline: none;
+}
+
+.login-btn:hover {
+  background: #ee3907; /* slightly darker red */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.login-btn:active {
+  background: #7a1e03;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 40px;
+
+    padding: 18px 8%;
+    background-color: #172033;
+}
+
+#site-navigation {
+    visibility: hidden;
+}
+
+#site-navigation.is-ready {
+    visibility: visible;
+}
+
+.nav-error {
+    color: #fca5a5;
+}
+
+.logo {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    color: #d1d5db;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+    color: white;
+}
+
+.account-dashboard {
+  width: min(760px, calc(100vw - 48px));
+  box-sizing: border-box;
+  padding: 32px;
+  border: 1px solid #334155;
+  border-radius: 20px;
+  background: #111827;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+}
+
+.account-dashboard .account-eyebrow {
+  margin: 0;
+  color: #60a5fa;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.account-dashboard h1 {
+  margin: 10px 0;
+}
+
+.account-intro {
+  margin: 0;
+  color: #cbd5e1;
+}
+
+.account-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.account-stat {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  background: #1e293b;
+}
+
+.account-stat h2 {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.account-stat-value {
+  margin: 12px 0 0;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.quiz-dashboard {
+  width: min(900px, calc(100vw - 48px));
+}
+
+.admin-users-dashboard,
+.available-quizzes-dashboard {
+  width: min(900px, calc(100vw - 48px));
+  margin-top: 24px;
+}
+
+.admin-users-dashboard > h2,
+.available-quizzes-dashboard > h2 {
+  margin: 10px 0;
+}
+
+.admin-users-list,
+.available-quizzes-list {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0 0;
+  padding: 0;
+}
+
+.admin-user-item,
+.available-quiz-item {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  background: #1e293b;
+}
+
+.admin-user-details {
+  display: grid;
+  gap: 6px;
+  min-width: 180px;
+  overflow-wrap: anywhere;
+}
+
+.admin-user-details span,
+.admin-user-note {
+  color: #cbd5e1;
+  font-size: 0.9rem;
+}
+
+.admin-user-item button,
+.available-quiz-item button {
+  margin: 0;
+  padding: 8px 14px;
+  background: #2563eb;
+  color: white;
+}
+
+.admin-user-item .danger-button {
+  background: #b91c1c;
+}
+
+.available-quiz-item > div {
+  flex: 1;
+  min-width: 200px;
+}
+
+.available-quiz-item h3,
+.available-quiz-item p {
+  margin: 0 0 6px;
+}
+
+.available-quiz-item p {
+  color: #cbd5e1;
+}
+
+.quiz-container {
+  margin-top: 28px;
+  padding: 24px;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  background: #0f172a;
+}
+
+.quiz-container h2 {
+  margin-top: 0;
+}
+
+#quiz-crud-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+#quiz-crud-controls label {
+  margin-top: 8px;
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+#quiz-crud-controls input,
+#quiz-crud-controls textarea,
+#quiz-crud-controls select {
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  background: #1e293b;
+  color: white;
+  font: inherit;
+}
+
+#quiz-crud-controls textarea {
+  resize: vertical;
+}
+
+#quiz-crud-controls input:focus,
+#quiz-crud-controls textarea:focus,
+#quiz-crud-controls select:focus {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+#quiz-crud-controls > button {
+  justify-self: start;
+  margin: 8px 8px 8px 0;
+  background: #2563eb;
+  color: white;
+}
+
+.nav-links .nav-action {
+  margin: 0;
+  padding: 10px 16px;
+  background: #334155;
+  color: white;
+}
+
+#quiz-crud-controls .quiz-crud-controls-list {
+  display: grid;
+  gap: 12px;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+#quiz-crud-controls .quiz-crud-controls-list li {
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  background: #1e293b;
+}
+
+#quiz-crud-controls .quiz-crud-controls-list li button {
+  margin: 0;
+  padding: 8px 14px;
+}
+
+.quiz-list-heading {
+  margin: 28px 0 12px;
+  color: #cbd5e1;
+  font-size: 1.1rem;
+}
+
+.account-dashboard + #account-message {
+  min-height: 1.5em;
+  color: #fca5a5;
+  text-align: center;
+}
+
+.account-page .main-content {
+  height: auto;
+  min-height: calc(100vh - 76px);
+  padding: 48px 0;
+}
+
+@media (max-width: 640px) {
+  .account-dashboard {
+    padding: 24px;
+  }
+
+  .account-stats {
+    grid-template-columns: 1fr;
+  }
+}

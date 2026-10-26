@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrazione</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav id="site-navigation" class="navbar" aria-label="Main navigation" aria-busy="true"></nav>
+    
+        <div class="main-content">
+            <main>
+                <div class="user-container">
+                    <h1>Registrazione</h1>
+                    <p>Crea un account usando la tua email e una password valida.</p>
+                    <p>La password deve contenere almeno 8 caratteri, una lettera maiuscola, una minuscola e un numero.</p>
+                    <template id="crud-item-template">
+                        <input type="text" />
+                    </template>
+                </div>
+            </main>
+        </div>
+    
+    </header>
+
+    <script src="{{ url_for('static', filename='js/shared/api_request.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/crud/crud_ui_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/crud/crud_client.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/register.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/site_navigation.js') }}"></script>
+    
+</body>
+</html>

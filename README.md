@@ -2,7 +2,7 @@
 
 ## 📌 Overview
 
-This repository contains a comprehensive collection of Python Flask web application examples, demonstrating various aspects of full-stack web development. The examples are organized by topic and showcase different techniques for building web applications with Flask.
+This repository contains a comprehensive collection of Python Flask web application examples, demonstrating various aspects of full-stack web development. Most examples are organized by topic under `Python_Server/`, with the session-enabled quiz creator in its own project folder.
 
 ---
 
@@ -26,6 +26,12 @@ All examples are located in the `Python_Server/` directory and organized by cate
   - CRUD operations for quiz questions
   - User scoring system
   - RESTful API endpoints
+
+**Session-enabled quiz creator:** `mini-quiz-creator-sessions/mini-quiz-game-mongodb/`
+
+- Flask sessions and role-based user accounts
+- Admin quiz and user management
+- Python backend guide and Mermaid UML documentation
 
 ### 🍃 MongoDB Integration
 
