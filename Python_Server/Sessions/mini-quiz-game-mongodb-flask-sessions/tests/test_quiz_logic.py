@@ -1,7 +1,7 @@
 import unittest
 
-from backend.logic.quiz_api import QuizAPI
-from backend.logic.quiz_logic import QuizLogic
+from backend.logic.quizzes.quiz_api import QuizAPI
+from backend.logic.quizzes.quiz_logic import QuizLogic
 
 
 class QuizLogicTests(unittest.TestCase):

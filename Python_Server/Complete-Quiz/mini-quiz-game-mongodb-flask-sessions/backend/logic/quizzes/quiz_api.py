@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 
 from flask import session
 
-from .generic_api import GenericAPI
+from ..common.generic_api import GenericAPI
 
 
 class QuizAPI(GenericAPI):

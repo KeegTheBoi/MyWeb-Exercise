@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Super Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/home.css') }}" />
+  </head>
+  <body>
+    <header>
+      
+        <nav id="site-navigation" class="navbar" aria-label="Main navigation" aria-busy="true"></nav>
+
+        <div class="main-content">
+          <main>
+            <h1>Simple Super Quiz Game</h1>
+            <p>Welcome to the Super Quiz Game! Test your knowledge and have fun!</p>
+            <p>Quiz creation is available to admin accounts.</p>
+            <button id="play-quizzes-button" type="button" hidden aria-expanded="false" aria-controls="available-quizzes-panel">
+              Play
+            </button>
+            <section id="available-quizzes-panel" class="account-dashboard available-quizzes-dashboard" aria-labelledby="available-quizzes-title" hidden>
+              <p class="account-eyebrow">Play</p>
+              <h2 id="available-quizzes-title">Available quizzes</h2>
+              <p class="account-intro">Only quizzes published by an admin are shown here.</p>
+              <p id="available-quizzes-message" role="status" aria-live="polite"></p>
+              <ul id="available-quizzes-list" class="available-quizzes-list"></ul>
+            </section>
+
+          </main>
+        </div>
+    </header>
+
+    <main id="quiz-page" class="quiz-page" aria-labelledby="active-quiz-title" tabindex="-1" hidden>
+      <div class="quiz-page-header">
+        <button id="leave-quiz-button" type="button">Back to quizzes</button>
+        <h1 id="active-quiz-title"></h1>
+      </div>
+      <div id="active-quiz-stage"></div>
+    </main>
+
+    <footer>
+        © Super Quiz 2026. All rights reserved.
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/api_request.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/home.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/site_navigation.js') }}"></script>
+  </body>
+</html>

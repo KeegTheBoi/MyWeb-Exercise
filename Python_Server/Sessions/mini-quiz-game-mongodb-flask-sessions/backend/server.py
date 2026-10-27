@@ -7,13 +7,12 @@ if BASE_DIR not in sys.path:
 
 from flask import Flask, jsonify, render_template, session
 from pymongo import MongoClient
-from backend.logic.authentication_api import AuthenticationAPI
-from backend.logic.generic_api import GenericAPI
-from backend.logic.quiz_logic import QuizLogic
-from backend.logic.registration_api import RegistrationAPI
-from backend.logic.quiz_api import QuizAPI
-from backend.logic.user_admin_api import UserAdminAPI
-from backend.logic.user_registration import UserRegistrationLogic
+from backend.logic.auth.authentication_api import AuthenticationAPI
+from backend.logic.auth.registration_api import RegistrationAPI
+from backend.logic.quizzes.quiz_api import QuizAPI
+from backend.logic.quizzes.quiz_logic import QuizLogic
+from backend.logic.users.user_admin_api import UserAdminAPI
+from backend.logic.users.user_registration import UserRegistrationLogic
 
 TEMPLATE_DIR = os.path.join(BASE_DIR, "frontend", "templates")
 STATIC_DIR = os.path.join(BASE_DIR, "frontend", "static")

@@ -3,9 +3,13 @@
 ## Project structure
 
 - `backend/server.py`: Flask application and MongoDB configuration.
-- `backend/logic/`: quiz, user, authentication, and API logic.
+- `backend/logic/common/`: shared API response and CRUD infrastructure.
+- `backend/logic/auth/`: authentication and registration endpoints.
+- `backend/logic/quizzes/`: quiz endpoints and quiz-specific rules.
+- `backend/logic/users/`: user profiles, registration data, and admin user management.
 - `frontend/templates/`: Jinja-rendered HTML pages.
-- `frontend/static/css/`: shared stylesheets.
+- `frontend/static/css/base.css`: shared design tokens, navigation, and common components.
+- `frontend/static/css/pages/`: page-specific stylesheets loaded with `base.css`.
 - `frontend/static/js/crud/`: reusable CRUD client and UI.
 - `frontend/static/js/pages/`: JavaScript for individual pages.
 - `frontend/static/js/shared/`: shared API response handling, site navigation, and login-state UI.
@@ -24,7 +28,7 @@
    - Update the matching entity name and fields in `frontend/static/js/app.js`.
 
 2. **Customize the Data Structure**:
-   - Add entity-specific behavior in `backend/logic/`.
+   - Add entity-specific behavior in the matching package under `backend/logic/`.
    - Update page markup in `frontend/templates/` and page scripts in `frontend/static/js/pages/`.
 
 3. **Adapt the UI**:

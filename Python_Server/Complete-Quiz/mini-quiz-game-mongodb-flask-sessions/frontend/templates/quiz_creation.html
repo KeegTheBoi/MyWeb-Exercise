@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Creation - Super Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/admin.css') }}">
+</head>
+<body class="account-page">
+    <header>
+        <nav id="site-navigation" class="navbar" aria-label="Main navigation" aria-busy="true"></nav>
+
+        <div class="main-content">
+            <main class="admin-workspace" aria-labelledby="admin-workspace-title">
+                <header class="admin-workspace-heading">
+                    <div>
+                        <p class="account-eyebrow">Administration</p>
+                        <h1 id="admin-workspace-title">Workspace</h1>
+                    </div>
+                    <p class="account-intro">Manage quizzes and player accounts in one place.</p>
+                </header>
+                <div class="admin-workspace-layout">
+                    <nav class="admin-sidebar" aria-label="Workspace sections">
+                        <p class="admin-sidebar-label">Workspace</p>
+                        <button class="admin-nav-item is-active" type="button" id="show-quizzes-button" aria-label="Quizzes: create and edit quizzes" aria-controls="quiz-workspace-panel" aria-current="page">
+                            <span class="admin-nav-icon" aria-hidden="true">Q</span>
+                            <span><strong>Quizzes</strong><small>Create and edit quizzes</small></span>
+                        </button>
+                        <button class="admin-nav-item" type="button" id="show-users-button" aria-label="Users: manage player accounts" aria-controls="users-workspace-panel">
+                            <span class="admin-nav-icon" aria-hidden="true">U</span>
+                            <span><strong>Users</strong><small>Manage player accounts</small></span>
+                        </button>
+                        <a class="admin-nav-item admin-nav-link" href="/users.html" aria-label="My account: view your profile">
+                            <span class="admin-nav-icon" aria-hidden="true">A</span>
+                            <span><strong>My account</strong><small>View your profile</small></span>
+                        </a>
+                    </nav>
+                    <div class="admin-workspace-content">
+                        <section id="quiz-workspace-panel" class="admin-workspace-panel" aria-labelledby="quiz-title">
+                            <div class="admin-panel-heading">
+                                <div>
+                                    <p class="account-eyebrow">Quiz library</p>
+                                    <h2 id="quiz-title">Create and manage quizzes</h2>
+                                </div>
+                                <p>Build a quiz and manage the content players can access.</p>
+                            </div>
+                            <div class="quiz-container" aria-label="Quiz form and list">
+                                <h3 id="quiz-form-title">Create a quiz</h3>
+                                <div id="quiz-crud-controls" class="quiz-crud-controls"></div>
+                            </div>
+                        </section>
+                        <section id="users-workspace-panel" class="admin-workspace-panel" aria-labelledby="admin-users-title" hidden>
+                            <div class="admin-panel-heading">
+                                <div>
+                                    <p class="account-eyebrow">Player accounts</p>
+                                    <h2 id="admin-users-title">Manage users</h2>
+                                </div>
+                                <p>Update account roles or remove regular accounts.</p>
+                            </div>
+                            <section class="admin-users-dashboard">
+                                <p id="admin-users-message" role="status" aria-live="polite"></p>
+                                <ul id="admin-users-list" class="admin-users-list"></ul>
+                            </section>
+                        </section>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+    </header>
+
+    <script src="{{ url_for('static', filename='js/shared/api_request.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/site_navigation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/crud/crud_client.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/admin_workspace.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/quiz_creation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/admin_users.js') }}"></script>
+</body>
+</html>

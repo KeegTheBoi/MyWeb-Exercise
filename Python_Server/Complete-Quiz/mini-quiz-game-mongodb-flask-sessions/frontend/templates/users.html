@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signed in - Super Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/account.css') }}" />
+  </head>
+  <body class="account-page">
+    <header>
+      <nav id="site-navigation" class="navbar" aria-label="Main navigation" aria-busy="true"></nav>
+      <div class="main-content">
+        <main>
+          <section class="account-dashboard profile-dashboard" aria-labelledby="account-title">
+            <div class="profile-heading">
+              <div>
+                <p class="account-eyebrow">Player profile</p>
+                <h1 id="account-title">Your account</h1>
+                <p class="account-intro">A snapshot of your progress and account details.</p>
+              </div>
+              <a class="profile-home-link" href="/">Back to home</a>
+            </div>
+            <section class="profile-identity" aria-label="Account details">
+              <div id="account-avatar" class="profile-avatar" aria-hidden="true">…</div>
+              <div class="profile-identity-copy">
+                <h2 id="signed-in-email">Loading account...</h2>
+                <span id="account-role" class="profile-role">Loading...</span>
+              </div>
+            </section>
+            <section class="account-stats profile-stats" aria-label="Quiz statistics">
+              <article class="account-stat profile-stat-score">
+                <span class="profile-stat-icon" aria-hidden="true">✦</span>
+                <h2>Total score</h2>
+                <p id="signed-in-score" class="account-stat-value">0</p>
+                <p class="profile-stat-caption">Correct answers earned</p>
+              </article>
+              <article class="account-stat profile-stat-completed">
+                <span class="profile-stat-icon" aria-hidden="true">✓</span>
+                <h2>Quizzes completed</h2>
+                <p id="quizzes-completed" class="account-stat-value">0</p>
+                <p class="profile-stat-caption">Keep the streak going</p>
+              </article>
+            </section>
+            <div class="profile-actions">
+              <a class="profile-primary-action" href="/">Play a quiz</a>
+              <a id="admin-workspace-link" class="profile-secondary-action" href="/quiz_creation.html" hidden>Open admin workspace</a>
+            </div>
+          </section>
+          <p id="account-message" class="profile-message" role="alert" aria-live="polite"></p>
+        </main>
+      </div>
+    </header>
+    <script src="{{ url_for('static', filename='js/shared/api_request.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/logged_in.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/site_navigation.js') }}"></script>
+  </body>
+</html>

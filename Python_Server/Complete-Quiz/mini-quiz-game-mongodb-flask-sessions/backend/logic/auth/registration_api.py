@@ -1,7 +1,7 @@
 from pymongo.errors import DuplicateKeyError
 
-from .api_response import APIResponse
-from .user_registration import EmailAlreadyRegistered
+from ..common.api_response import APIResponse
+from ..users.user_registration import EmailAlreadyRegistered
 
 
 class RegistrationAPI(APIResponse):

@@ -3,8 +3,8 @@ import unittest
 from bson import ObjectId
 from flask import Flask
 
-from backend.logic.generic_crud import ManagerCRUD
-from backend.logic.quiz_api import QuizAPI
+from backend.logic.common.generic_crud import ManagerCRUD
+from backend.logic.quizzes.quiz_api import QuizAPI
 
 
 class QuizManager(ManagerCRUD):

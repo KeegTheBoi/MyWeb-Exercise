@@ -1,5 +1,5 @@
 
-from .generic_crud import ManagerCRUD
+from ..common.generic_crud import ManagerCRUD
 from werkzeug.security import generate_password_hash
 
 class UserLogic(ManagerCRUD):

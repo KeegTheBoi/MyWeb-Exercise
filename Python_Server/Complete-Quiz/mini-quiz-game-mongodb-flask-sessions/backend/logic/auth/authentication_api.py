@@ -1,6 +1,6 @@
 from flask import redirect, render_template, session
 
-from .api_response import APIResponse
+from ..common.api_response import APIResponse
 
 """
 Authentication API for handling user login, logout, and session management.

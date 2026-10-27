@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create an account - Super Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/auth.css') }}">
+</head>
+<body class="auth-page">
+    <header>
+        <nav id="site-navigation" class="navbar" aria-label="Main navigation" aria-busy="true"></nav>
+    
+        <div class="main-content">
+            <main>
+                <section class="auth-card registration-card" aria-labelledby="register-title">
+                    <p class="account-eyebrow">Start your next challenge</p>
+                    <h1 id="register-title">Create your account</h1>
+                    <p class="auth-intro">Save your quiz results and track your progress as you play.</p>
+                    <p class="password-hint">Use at least 8 characters, including an uppercase letter, a lowercase letter, and a number.</p>
+                    <div class="user-container registration-form-container" aria-label="Registration form">
+                    <template id="crud-item-template">
+                        <input type="text" />
+                    </template>
+                    </div>
+                    <p class="auth-switch">Already have an account? <a href="/login.html">Log in</a></p>
+                </section>
+            </main>
+        </div>
+    
+    </header>
+
+    <script src="{{ url_for('static', filename='js/shared/api_request.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/crud/crud_ui_manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/crud/crud_client.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/register.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/site_navigation.js') }}"></script>
+    
+</body>
+</html>

@@ -1,6 +1,6 @@
 from flask import request, session
 
-from .api_response import APIResponse
+from ..common.api_response import APIResponse
 
 
 class UserAdminAPI(APIResponse):

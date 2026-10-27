@@ -3,6 +3,8 @@ const signedInScore = document.querySelector("#signed-in-score");
 const quizzesCompleted = document.querySelector("#quizzes-completed");
 const accountRole = document.querySelector("#account-role");
 const accountMessage = document.querySelector("#account-message");
+const accountAvatar = document.querySelector("#account-avatar");
+const adminWorkspaceLink = document.querySelector("#admin-workspace-link");
 
 function animateNumber(element, value) {
   const target = Number(value);
@@ -37,9 +39,13 @@ async function loadCurrentSession() {
   }
 
   signedInEmail.textContent = data.user.email;
+  accountAvatar.textContent = data.user.email.slice(0, 1).toUpperCase();
   animateNumber(signedInScore, data.user.score);
   animateNumber(quizzesCompleted, data.user.quiz_completed);
-  accountRole.textContent = data.user.is_admin ? "Admin" : "Player";
+  const role = data.user.is_admin ? "Admin" : "Player";
+  accountRole.textContent = role;
+  accountRole.classList.toggle("is-admin", data.user.is_admin);
+  adminWorkspaceLink.hidden = !data.user.is_admin;
 }
 
 loadCurrentSession().catch((error) => {

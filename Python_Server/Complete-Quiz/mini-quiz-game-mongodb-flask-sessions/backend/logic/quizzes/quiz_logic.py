@@ -1,5 +1,5 @@
 
-from .generic_crud import ManagerCRUD
+from ..common.generic_crud import ManagerCRUD
 
 class QuizLogic(ManagerCRUD):
     def __init__(self, collection):
