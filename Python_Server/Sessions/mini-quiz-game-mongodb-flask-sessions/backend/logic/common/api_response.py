@@ -11,36 +11,14 @@ class APIResponse:
         return None, APIResponse.bad_response(error_message, status_code)
 
     @staticmethod
-    def good_response(
-        message,
-        data=None,
-        status_code=200,
-        data_key="data",
-        **fields,
-    ):
-        return APIResponse.response(
-            message, status_code, data, data_key, **fields
-        )
+    def good_response(message, data=None, status_code=200, data_key="data", **fields):
+        return APIResponse.response(message, status_code, data, data_key, **fields)
 
     @staticmethod
-    def bad_response(
-        message,
-        status_code=400,
-        data=None,
-        data_key="data",
-        **fields,
-    ):
-        return APIResponse.response(
-            message, status_code, data, data_key, **fields
-        )
+    def bad_response( message, status_code=400, data=None, data_key="data", **fields):
+        return APIResponse.response(message, status_code, data, data_key, **fields)
 
-    def response(
-            message,
-            status_code,
-            data,
-            data_key="data",
-            **fields,
-    ):
+    def response( message, status_code, data, data_key="data", **fields):
         response = {"success": status_code < 400, "message": message, **fields}
         if data is not None:
             response[data_key] = data

@@ -297,7 +297,7 @@ class RegistrationFormManager extends CrudUIManager {
     confirmation.input.setCustomValidity(
       password.input.value === confirmation.input.value
         ? ""
-        : "Le password non corrispondono.",
+        : "Passwords do not match.",
     );
 
     if (!this.formElements.form.reportValidity()) return;
@@ -324,14 +324,14 @@ class RegistrationFormManager extends CrudUIManager {
   }
 
   startEdit() {
-    throw new Error("La registrazione non supporta la modifica degli utenti.");
+    throw new Error("Registration does not support editing users.");
   }
 
   async updateItem() {
-    throw new Error("La registrazione non supporta la modifica degli utenti.");
+    throw new Error("Registration does not support editing users.");
   }
 
   async deleteItem() {
-    throw new Error("La registrazione non supporta la gestione degli utenti.");
+    throw new Error("Registration does not support managing users.");
   }
 }

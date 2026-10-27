@@ -7,13 +7,8 @@ from ..common.generic_api import GenericAPI
 
 class QuizAPI(GenericAPI):
     def __init__(self, app, manager, write_authorizer, user_manager):
-        self.user_manager = user_manager
-        super().__init__(
-            app,
-            manager,
-            "quiz",
-            write_authorizer=write_authorizer, #Lets only admins create quizzes
-        )
+        self.user_manager = user_manager  #Lets only admins create quizzes
+        super().__init__(app, manager, "quiz", write_authorizer=write_authorizer)
         app.add_url_rule(
             "/api/quiz/<item_id>/complete",
             view_func=self.complete_quiz,

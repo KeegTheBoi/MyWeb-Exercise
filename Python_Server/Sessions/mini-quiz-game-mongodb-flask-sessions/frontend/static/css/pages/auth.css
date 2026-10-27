@@ -49,6 +49,15 @@
   font-size: 0.88rem;
 }
 
+.registration-card .password-hint {
+  margin: -10px 0 18px;
+  padding: 11px 13px;
+  border: 1px solid rgba(139, 156, 255, 0.16);
+  border-radius: 11px;
+  background: rgba(102, 120, 232, 0.08);
+  line-height: 1.5;
+}
+
 #login-form,
 .user-container-registration-form {
   display: grid;

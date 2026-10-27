@@ -1,23 +1,23 @@
 # Python Backend Guide
 
-This guide describes the Python/Flask and MongoDB backend only. Browser templates,
-styles, and JavaScript implementation details are intentionally out of scope.
+This guide describes the Python/Flask and MongoDB backend. The project README
+also documents the frontend stylesheet and page organization.
 
 ## Package map
 
 | Module | Responsibility |
 | --- | --- |
 | `backend/server.py` | Creates the Flask application, configures MongoDB and sessions, initializes managers and APIs, and defines authorization policy. |
-| `backend/logic/api_response.py` | Shared JSON request parsing and success/error response helpers. |
-| `backend/logic/generic_api.py` | Generic entity CRUD routes and optional write authorization. |
-| `backend/logic/quiz_api.py` | Quiz access rules and the authenticated, not-yet-implemented completion route. |
-| `backend/logic/user_admin_api.py` | Admin-only user listing, role changes, and regular-user deletion routes. |
-| `backend/logic/registration_api.py` | Account registration endpoint and registration-specific error mapping. |
-| `backend/logic/authentication_api.py` | Login, logout, current-session, and protected page routes. |
-| `backend/logic/generic_crud.py` | MongoDB-backed create, read, update, and delete operations. |
-| `backend/logic/user_logic.py` | User CRUD behavior and password hashing/removal. |
-| `backend/logic/user_registration.py` | Email/password validation, registration, authentication, profile lookup, and admin-role lookup. |
-| `backend/logic/quiz_logic.py` | Quiz validation, availability defaults, and MongoDB CRUD operations. |
+| `backend/logic/common/api_response.py` | Shared JSON request parsing and success/error response helpers. |
+| `backend/logic/common/generic_api.py` | Generic entity CRUD routes and optional write authorization. |
+| `backend/logic/common/generic_crud.py` | MongoDB-backed create, read, update, and delete operations. |
+| `backend/logic/auth/registration_api.py` | Account registration endpoint and registration-specific error mapping. |
+| `backend/logic/auth/authentication_api.py` | Login, logout, current-session, and protected page routes. |
+| `backend/logic/quizzes/quiz_api.py` | Quiz access, result retrieval, and attempt completion routes. |
+| `backend/logic/quizzes/quiz_logic.py` | Quiz validation, availability defaults, and MongoDB CRUD operations. |
+| `backend/logic/users/user_admin_api.py` | Admin-only user listing, role changes, and regular-user deletion routes. |
+| `backend/logic/users/user_logic.py` | User CRUD behavior and password hashing/removal. |
+| `backend/logic/users/user_registration.py` | Email/password validation, registration, authentication, profile lookup, quiz attempts, and admin-role lookup. |
 
 ## Class diagram
 
@@ -163,13 +163,15 @@ Example successful response:
 | `POST` | `/api/quiz` | Creates a quiz; admin session required. |
 | `PUT` | `/api/quiz/<item_id>` | Updates a quiz; admin session required. |
 | `DELETE` | `/api/quiz/<item_id>` | Deletes a quiz; admin session required. |
-| `POST` | `/api/quiz/<item_id>/complete` | Requires a signed-in user and available quiz; returns `501` until gameplay is implemented. |
+| `POST` | `/api/quiz/<item_id>/complete` | Records a signed-in user's answers and returns a saved result; one attempt per user and quiz. |
 | `GET` | `/api/admin/users` | Lists safe user profiles; admin session required. |
 | `PATCH` | `/api/admin/users/<user_id>/role` | Changes another account's admin role; admin session required. |
 | `DELETE` | `/api/admin/users/<user_id>` | Deletes regular user accounts only; admin session required. |
 
 Quiz reads require a signed-in account. Regular users receive only available
-quizzes; admins can see all quizzes and manage availability. Quiz writes and user
+quizzes and do not receive correct answers; admins can see all quizzes and manage
+availability. Both quiz-list and quiz-detail responses include a user's saved
+completion flag and result when an attempt exists. Quiz writes and user
 administration use server-side admin checks rather than relying on page visibility.
 Administrators cannot demote themselves, and admin accounts cannot be deleted by
 the regular-account deletion route.
@@ -186,6 +188,7 @@ documents contain:
 | `score` | Numeric player score, initialized to `0`. |
 | `quiz_completed` | Completed quiz count, initialized to `0`. |
 | `is_admin` | Admin role flag; false by default unless configured as an admin. |
+| `quiz_attempts` | Per-quiz attempt records, including completion time and answer/result review data. |
 
 Quiz documents have an `is_available` boolean. New quizzes default to available;
 existing documents are backfilled as available at startup. Admins can publish or
@@ -197,9 +200,15 @@ At startup, missing score, completion-count, and admin fields are backfilled.
 and matching newly registered accounts receive `is_admin: true`.
 
 Registration trims and lowercases email addresses, checks the configured email
-pattern, enforces password length and character requirements, and detects duplicate
-emails. Passwords are hashed in `UserLogic.create()`. Authentication checks the
-stored hash and returns only the public profile fields.
+pattern, enforces an 8-to-128 character password with uppercase, lowercase, and
+numeric characters, and detects duplicate emails. Passwords are hashed in
+`UserLogic.create()`. Authentication checks the stored hash and returns only the
+public profile fields.
+
+On quiz completion, the API validates one selected choice per question, builds a
+result with the score and answer review, and atomically adds the attempt to the
+user document while incrementing `quiz_completed` and `score`. A second
+completion attempt for the same quiz is rejected with HTTP `409`.
 
 ## Startup and configuration
 
@@ -219,10 +228,8 @@ MongoDB URL by default (`mongodb://localhost:27017`) and stores data in database
 | `SESSION_COOKIE_SECURE` | Set to `true` when serving over HTTPS to restrict session cookies to secure transport. |
 | `ADMIN_EMAILS` | Comma-separated emails to provision as admins. |
 
-The completion endpoint is a scaffold only: it checks authentication and quiz
-availability, then returns HTTP `501`. TODO markers identify where answer checking,
-scoring, attempt persistence, and profile-stat updates belong. Creating a quiz
-does not increment `score` or `quiz_completed`.
+Quiz completion updates the user's attempt history, score, and completion count.
+Creating or editing a quiz does not change player statistics.
 
 ## Main backend flows
 

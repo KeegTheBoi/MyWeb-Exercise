@@ -4,13 +4,7 @@ from .api_response import APIResponse
 
 
 class GenericAPI(APIResponse):
-    def __init__(
-        self,
-        app: Flask,
-        manager,
-        entity_name: str,
-        write_authorizer=None,
-    ):
+    def __init__( self, app: Flask, manager, entity_name: str, write_authorizer=None):
         """
         app: Flask instance
         manager: any object that implements create, read_all, read_by_id, update, delete

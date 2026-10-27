@@ -1,63 +1,83 @@
 # Mini Quiz Game
 
+A Flask and MongoDB quiz application with account registration, quiz management,
+player progress, and per-user quiz results.
+
 ## Project structure
 
-- `backend/server.py`: Flask application and MongoDB configuration.
-- `backend/logic/common/`: shared API response and CRUD infrastructure.
+- `backend/server.py`: Flask application, MongoDB configuration, and API setup.
+- `backend/logic/common/`: shared API response and MongoDB CRUD infrastructure.
 - `backend/logic/auth/`: authentication and registration endpoints.
-- `backend/logic/quizzes/`: quiz endpoints and quiz-specific rules.
-- `backend/logic/users/`: user profiles, registration data, and admin user management.
-- `frontend/templates/`: Jinja-rendered HTML pages.
-- `frontend/static/css/base.css`: shared design tokens, navigation, and common components.
-- `frontend/static/css/pages/`: page-specific stylesheets loaded with `base.css`.
-- `frontend/static/js/crud/`: reusable CRUD client and UI.
-- `frontend/static/js/pages/`: JavaScript for individual pages.
-- `frontend/static/js/shared/`: shared API response handling, site navigation, and login-state UI.
-- `frontend/static/js/app.js`: home-page application logic.
-- `README.md`: setup and application notes.
+- `backend/logic/quizzes/`: quiz API routes and quiz validation.
+- `backend/logic/users/`: profiles, registration data, and user administration.
+- `frontend/templates/`: home, auth, account, and admin pages.
+- `frontend/static/css/base.css`: shared styles and design tokens.
+- `frontend/static/css/pages/`: page-specific stylesheets loaded alongside `base.css`.
+- `frontend/static/js/pages/`: page behavior, including quiz play and admin workspace.
+- `frontend/static/js/shared/`: API request handling and site navigation.
+- `frontend/static/js/crud/`: shared CRUD and registration-form UI.
+- `docs/`: backend guide in Markdown and DOCX formats.
 
-## Python backend documentation
+## Run locally
 
-- [Python Backend Guide (DOCX)](docs/python-backend.docx)
-- [Python Backend Guide and Mermaid UML (Markdown)](docs/python-backend.md)
+1. Start MongoDB at `mongodb://localhost:27017` or configure the connection in
+   `backend/server.py`.
+2. From the repository root, run:
 
-## How to Use
+   ```sh
+   python -m backend.server
+   ```
 
-1. **Configure the Entity**:
-   - In `backend/server.py`, change `ENTITY_NAME` to your entity (e.g., "quote", "product").
-   - Update the matching entity name and fields in `frontend/static/js/app.js`.
+3. Open `http://localhost:5000`.
 
-2. **Customize the Data Structure**:
-   - Add entity-specific behavior in the matching package under `backend/logic/`.
-   - Update page markup in `frontend/templates/` and page scripts in `frontend/static/js/pages/`.
+The application serves its templates and static files through Flask; do not open
+the HTML files directly from disk. Set `FLASK_SECRET_KEY` to a stable private
+value outside local development. Set `SESSION_COOKIE_SECURE=true` when serving
+over HTTPS.
 
-3. **Adapt the UI**:
-   - Shared assets belong under `frontend/static/`; templates use Flask's `url_for('static', filename=...)` to reference them.
+## Accounts and roles
 
-4. **Run the Server**:
-   - From the project root, run `python -m backend.server` (or `python backend/server.py`).
-   - The application serves templates and static assets through Flask, so do not open the HTML files directly from disk.
+Register at `/register.html` with an email and a password of 8 to 128 characters
+containing an uppercase letter, a lowercase letter, and a number. The form also
+requires password confirmation and displays validation and server feedback in
+the same auth card style as login. The server repeats validation, normalizes
+email addresses, enforces uniqueness, and stores a Werkzeug password hash.
+Passwords and hashes are never returned by API responses.
 
-## User Registration
+New users start with score and completed-quiz counts of zero. Set `ADMIN_EMAILS`
+to a comma-separated list of email addresses to grant admin access. Matching
+existing accounts are promoted at startup, and matching registrations receive
+the admin role.
 
-Registration uses the dedicated `POST /api/register` endpoint instead of the generic user CRUD routes. The browser checks the email, requires a password with at least 8 characters including an uppercase letter, a lowercase letter, and a number, and asks the user to confirm it. The server repeats the validation, normalizes email addresses, enforces uniqueness in MongoDB, and stores only a Werkzeug password hash. Passwords and hashes are never included in API responses.
+## Quiz play and administration
 
-New user documents include numeric `score` and `quiz_completed` fields, both initialized to `0`, and an `is_admin` flag that defaults to `false`. On startup, the server backfills missing profile fields for existing users. Set `ADMIN_EMAILS` to a comma-separated list of account emails to grant admin access; matching existing users are promoted at startup, and matching new registrations are created as admins. The signed-in page reads these values from the authenticated session endpoint. Completing an available quiz saves one attempt per user and quiz, increments `quiz_completed`, and adds the number of correct answers to the user's cumulative `score`. Quiz results show the percentage, the user's answers, and the correct answers; a completed quiz cannot be taken again.
+Players sign in at `/login.html`. Their profile is available at `/users.html`;
+admins also have access to `/quiz_creation.html`. Admins can create, edit, hide,
+publish, and delete quizzes and manage user roles. Quiz questions support at
+least two choices and one correct answer. Correct answers are excluded from
+player-facing quiz data.
 
-Login uses `POST /api/login`; the server verifies the stored password hash and creates a session cookie on success. The browser then navigates to `/users.html`, which is only served to a logged-in session. `POST /api/logout` clears the session. Set `FLASK_SECRET_KEY` to a stable, private value in deployment and `SESSION_COOKIE_SECURE=true` when serving over HTTPS; the server generates an ephemeral key when the secret variable is unset.
+Each user can complete an available quiz once. The result is saved with the
+user's quiz attempts, and completion increments the profile's quiz count and
+score. Quiz lists and detail responses include saved completion status and
+results so players can review a previous attempt in a later session.
 
-The shared navigation loads the server's session state on every page, showing account and logout links when signed in and quiz creation only to admins. The `/quiz_creation.html` page and quiz create, update, and delete API operations also enforce admin access on the server. Admins can create, list, edit, and delete quizzes with a title, description, availability, and one or more questions; each question has at least two choices and one designated correct answer. Correct answers are omitted from quiz data returned to regular users.
+## Frontend and backend organization
 
-API classes inherit shared `good_response` and `bad_response` helpers from `backend/logic/api_response.py`. Browser requests use the matching `requestJson` helper, which validates the common `{success, message}` response envelope and surfaces server errors consistently.
+Each page template loads the shared stylesheet and its own stylesheet from
+`frontend/static/css/pages/`. Keep styles used across pages in `base.css` and
+page-specific rules in the matching file under `pages/`. Backend modules are
+organized into domain packages under `backend/logic/`; update imports when
+adding or moving modules.
 
-Serve the registration and login pages and APIs over HTTPS outside local development so passwords and session cookies are protected in transit.
+The Python backend guide documents package responsibilities, routes, data
+validation, and class relationships:
 
-## Example for Quotes
+- [Backend guide (Markdown)](docs/python-backend.md)
+- [Backend guide (DOCX)](docs/python-backend.docx)
 
-To adapt for quotes (like the original example):
+Run the focused backend tests with:
 
-- Set `ENTITY_NAME = "quote"` in `backend/server.py`.
-- In `frontend/static/js/app.js`, change `{ content }` to `{ quote }` and adjust display accordingly.
-- Rename `items.json` to `quotes.json`.
-
-The business logic is now separated: the GenericCrudManager handles the data operations, and you can extend it or create specific managers if needed.
+```sh
+python -m unittest tests.test_quiz_api tests.test_quiz_logic
+```
