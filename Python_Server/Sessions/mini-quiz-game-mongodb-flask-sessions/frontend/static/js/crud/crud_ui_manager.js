@@ -268,10 +268,15 @@ class RegistrationFormManager extends CrudUIManager {
     createBtn.type = "submit";
     createBtn.textContent = "Register";
     createBtn.className = `${className}-create-btn`;
+    const statusMessage = document.createElement("p");
+    statusMessage.className = "registration-form-message";
+    statusMessage.setAttribute("role", "status");
+    statusMessage.setAttribute("aria-live", "polite");
     form.appendChild(createBtn);
+    form.appendChild(statusMessage);
     this.div.appendChild(form);
 
-    return { form, createBtn };
+    return { form, createBtn, statusMessage };
   }
 
   collectData() {
@@ -297,6 +302,9 @@ class RegistrationFormManager extends CrudUIManager {
 
     if (!this.formElements.form.reportValidity()) return;
 
+    this.formElements.createBtn.disabled = true;
+    this.formElements.createBtn.textContent = "Creating account...";
+    this.formElements.statusMessage.textContent = "";
     try {
       await this.client.apiRequest("/register", {
         method: "POST",
@@ -304,9 +312,14 @@ class RegistrationFormManager extends CrudUIManager {
         body: JSON.stringify(this.collectData()),
       });
       this.resetForm();
-      alert("Registrazione completata.");
+      this.formElements.statusMessage.textContent =
+        "Your account has been created. You can now log in.";
     } catch (error) {
-      alert(error.message || "Registrazione non riuscita.");
+      this.formElements.statusMessage.textContent =
+        error.message || "Registration failed.";
+    } finally {
+      this.formElements.createBtn.disabled = false;
+      this.formElements.createBtn.textContent = "Register";
     }
   }
 

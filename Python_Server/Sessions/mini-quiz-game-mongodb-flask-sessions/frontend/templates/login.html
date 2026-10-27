@@ -6,28 +6,31 @@
     <title>Log in - Super Quiz</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body>
+<body class="auth-page">
     <header>
         <nav id="site-navigation" class="navbar" aria-label="Main navigation" aria-busy="true"></nav>
-    
+
         <div class="main-content">
             <main>
-                <h1>Login Page</h1>
-                <p>Login if you already have an account.</p>
-                <p>Don't have an account? <a href="/register.html">Register here</a>.</p>
-                <form id="login-form">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
-                
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
-                
-                    <button id="login-submit" type="submit">Log in</button>
-                    <p id="login-message" role="alert" aria-live="polite"></p>
-                </form>
+                <section class="auth-card" aria-labelledby="login-title">
+                    <p class="account-eyebrow">Welcome back</p>
+                    <h1 id="login-title">Sign in to Super Quiz</h1>
+                    <p class="auth-intro">Pick up where you left off and keep your progress moving.</p>
+                    <form id="login-form">
+                        <label for="email">Email address</label>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+
+                        <button id="login-submit" type="submit">Log in</button>
+                        <p id="login-message" role="alert" aria-live="polite"></p>
+                    </form>
+                    <p class="auth-switch">New to Super Quiz? <a href="/register.html">Create an account</a></p>
+                </section>
             </main>
         </div>
-    
+
     </header>
 
     <script src="{{ url_for('static', filename='js/shared/api_request.js') }}"></script>

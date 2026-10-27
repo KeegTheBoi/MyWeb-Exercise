@@ -6,6 +6,7 @@ loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   loginMessage.textContent = "";
   loginSubmit.disabled = true;
+  loginSubmit.textContent = "Signing in...";
 
   try {
     const data = await window.requestJson("/api/login", {
@@ -23,5 +24,6 @@ loginForm.addEventListener("submit", async (event) => {
     loginMessage.textContent = error.message;
   } finally {
     loginSubmit.disabled = false;
+    loginSubmit.textContent = "Log in";
   }
 });

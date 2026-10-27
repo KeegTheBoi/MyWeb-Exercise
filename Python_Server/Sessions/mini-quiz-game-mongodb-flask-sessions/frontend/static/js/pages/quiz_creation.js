@@ -34,19 +34,25 @@ quizAvailabilityInput.add(new Option("Available to users", "true"));
 quizAvailabilityInput.add(new Option("Hidden from users", "false"));
 createField("Availability", quizAvailabilityInput);
 
+const questionsSection = document.createElement("section");
+questionsSection.className = "quiz-questions-section";
+
 const questionsHeading = document.createElement("h3");
+questionsHeading.id = "quiz-questions-heading";
 questionsHeading.textContent = "Questions";
-quizForm.appendChild(questionsHeading);
+questionsSection.setAttribute("aria-labelledby", questionsHeading.id);
+questionsSection.appendChild(questionsHeading);
 
 const questionList = document.createElement("div");
 questionList.className = "quiz-question-list";
-quizForm.appendChild(questionList);
+questionsSection.appendChild(questionList);
 
 const addQuestionButton = document.createElement("button");
 addQuestionButton.type = "button";
 addQuestionButton.textContent = "Add question";
 addQuestionButton.addEventListener("click", () => addQuestion());
-quizForm.appendChild(addQuestionButton);
+questionsSection.appendChild(addQuestionButton);
+quizForm.appendChild(questionsSection);
 
 const formActions = document.createElement("div");
 formActions.className = "quiz-form-actions";

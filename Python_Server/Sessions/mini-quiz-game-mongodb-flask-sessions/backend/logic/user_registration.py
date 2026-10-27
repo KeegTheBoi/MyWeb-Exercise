@@ -71,6 +71,36 @@ class UserRegistrationLogic(UserLogic):
 
         return self._to_profile(user)
 
+    def get_quiz_attempts(self, email):
+        user = self.collection.find_one(
+            {"email": email},
+            {"quiz_attempts": 1},
+        )
+        if not user:
+            return {}
+        return {
+            attempt["quiz_id"]: attempt
+            for attempt in user.get("quiz_attempts", [])
+            if isinstance(attempt, dict)
+            and isinstance(attempt.get("quiz_id"), str)
+        }
+
+    def record_quiz_attempt(self, email, quiz_id, attempt):
+        result = self.collection.update_one(
+            {
+                "email": email,
+                "quiz_attempts.quiz_id": {"$ne": quiz_id},
+            },
+            {
+                "$push": {"quiz_attempts": attempt},
+                "$inc": {
+                    "quiz_completed": 1,
+                    "score": attempt["result"]["correct_count"],
+                },
+            },
+        )
+        return result.matched_count > 0
+
     def list_profiles_for_admin(self):
         users = self.collection.find(
             {},

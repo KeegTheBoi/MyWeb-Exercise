@@ -46,6 +46,8 @@ class ManagerCRUD:
         data = self._load_data()
         for item in data:
             if str(item.get("_id")) == str(item_id):
+                if "_id" in item:
+                    item["_id"] = str(item["_id"])
                 return item
         return None
 
