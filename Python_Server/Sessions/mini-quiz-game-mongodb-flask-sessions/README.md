@@ -42,7 +42,7 @@ New user documents include numeric `score` and `quiz_completed` fields, both ini
 
 Login uses `POST /api/login`; the server verifies the stored password hash and creates a session cookie on success. The browser then navigates to `/users.html`, which is only served to a logged-in session. `POST /api/logout` clears the session. Set `FLASK_SECRET_KEY` to a stable, private value in deployment and `SESSION_COOKIE_SECURE=true` when serving over HTTPS; the server generates an ephemeral key when the secret variable is unset.
 
-The shared navigation loads the server's session state on every page, showing account and logout links when signed in and quiz creation only to admins. The `/quiz_creation.html` page and quiz create, update, and delete API operations also enforce admin access on the server. The admin quiz page uses the generic CRUD client/UI to create, list, edit, and delete quizzes with a title and description.
+The shared navigation loads the server's session state on every page, showing account and logout links when signed in and quiz creation only to admins. The `/quiz_creation.html` page and quiz create, update, and delete API operations also enforce admin access on the server. Admins can create, list, edit, and delete quizzes with a title, description, availability, and one or more questions; each question has at least two choices and one designated correct answer. Correct answers are omitted from quiz data returned to regular users.
 
 API classes inherit shared `good_response` and `bad_response` helpers from `backend/logic/api_response.py`. Browser requests use the matching `requestJson` helper, which validates the common `{success, message}` response envelope and surfaces server errors consistently.
 

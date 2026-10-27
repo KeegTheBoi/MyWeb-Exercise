@@ -10,7 +10,7 @@ class QuizAPI(GenericAPI):
             app,
             manager,
             "quiz",
-            write_authorizer=write_authorizer,
+            write_authorizer=write_authorizer, #Lets only admins create quizzes
         )
         app.add_url_rule(
             "/api/quiz/<item_id>/complete",
@@ -19,6 +19,8 @@ class QuizAPI(GenericAPI):
             endpoint="complete_quiz",
         )
 
+    """Method for retrieving the quizzes available to the user. 
+    Admins can see all quizzes, while regular users can only see available quizzes."""
     def get_all_entries(self):
         access_error = self._login_access_error()
         if access_error:
@@ -27,8 +29,8 @@ class QuizAPI(GenericAPI):
         quizzes = self.manager.read_all()
         if not self.user_manager.is_admin(session["user_email"]):
             quizzes = [
-                quiz for quiz in quizzes
-                if quiz.get("is_available") is True
+                self._hide_answers(quiz) for quiz in quizzes
+                if quiz.get("is_available") is True #filtering only available for players
             ]
         return self.good_response(
             "Available quizzes retrieved.",
@@ -41,14 +43,13 @@ class QuizAPI(GenericAPI):
         if access_error:
             return access_error
 
-        quiz = self.manager.read_by_id(item_id)
+        quiz = self.manager.read_by_id(item_id) #main retrieval of the quiz by id
         if not quiz:
             return self.bad_response("Quiz not found.", 404)
-        if (
-            not self.user_manager.is_admin(session["user_email"])
-            and quiz.get("is_available") is not True
-        ):
-            return self.bad_response("Quiz not found.", 404)
+        if not self.user_manager.is_admin(session["user_email"]):
+            if quiz.get("is_available") is not True:
+                return self.bad_response("Quiz not available.", 404)
+            quiz = self._hide_answers(quiz)
         return self.good_response("Quiz retrieved.", quiz, data_key="quiz")
 
     def complete_quiz(self, item_id):
@@ -63,6 +64,7 @@ class QuizAPI(GenericAPI):
             return self.bad_response("This quiz is not available.", 403)
 
         # TODO(gameplay): accept answers, validate them, and calculate the score.
+        
         # TODO(gameplay): persist the attempt and update the user's score/count.
         return self.bad_response(
             "Quiz gameplay has not been implemented yet.",
@@ -77,3 +79,17 @@ class QuizAPI(GenericAPI):
             session.clear()
             return self.bad_response("Log in to access quizzes.", 401)
         return None
+
+    @staticmethod
+    def _hide_answers(quiz):
+        return {
+            **quiz,
+            "questions": [
+                {
+                    key: value
+                    for key, value in question.items()
+                    if key != "answer"
+                }
+                for question in quiz.get("questions", [])
+            ],
+        }
